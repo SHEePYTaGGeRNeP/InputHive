@@ -13,7 +13,7 @@ namespace InputHiveClient
         public static Queue<string> ChatQueue = new Queue<string>();
         private readonly InputHiveClientSystem _hiveClientSystem;
 
-        private const string _VERSION = "V 1.0";
+        private const string _VERSION = "V 1.1";
 
         public InputHiveClientForm()
         {

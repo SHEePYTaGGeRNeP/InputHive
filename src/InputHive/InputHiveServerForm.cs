@@ -17,7 +17,7 @@ namespace InputHive
         public static Queue<string> LoggingQueue = new Queue<string>();
         public static Queue<string> ChatQueue = new Queue<string>();
 
-        private const string _VERSION = "V 1.0";
+        private const string _VERSION = "V 1.1";
 
         private void InputHiveServerForm_FormClosing(object sender, FormClosingEventArgs e)
         {
