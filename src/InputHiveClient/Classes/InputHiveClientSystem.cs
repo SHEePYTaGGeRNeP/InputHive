@@ -131,7 +131,7 @@ namespace InputHiveClient.Classes
 
         public void SendChatMessage(string pMessage)
         {
-            Client.SendMessage("chat:" + pMessage);
+            Client.SendMessage("chat:" + DateTime.Now + " " + pMessage);
         }
 
     }

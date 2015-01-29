@@ -83,7 +83,7 @@ namespace InputHive.Classes
             {
                 InputHiveServerForm.LoggingQueue.Enqueue(String.Format(
                     "{0} !-!-! ERROR: Error processing message: {1} from {2}\t\nERROR MESSAGE: {3}", DateTime.Now,
-                    pMessage.Text, pClient, lvException.Message));
+                    pMessage.Text, Server.FindClient(pClient.ClientId), lvException.Message));
                 //throw new Exception("Error processing message:\n" + pMessage.Text + "\n\n" + lvException.Message);
             }
         }

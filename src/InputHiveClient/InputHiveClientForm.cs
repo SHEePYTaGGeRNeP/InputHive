@@ -18,7 +18,7 @@ namespace InputHiveClient
         public InputHiveClientForm()
         {
             InitializeComponent();
-            this.Text = "Input Hive " + _VERSION;
+            this.Text = "Input Hive Client " + _VERSION;
             Timer lvTimer = new Timer { Interval = 500 };
             lvTimer.Tick += TimerOnTick;
             lvTimer.Start();
