@@ -38,7 +38,9 @@
             this.tbxUsername = new System.Windows.Forms.TextBox();
             this.tabView = new System.Windows.Forms.TabPage();
             this.gbxAllowedKeys = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.btnAddAll = new System.Windows.Forms.Button();
+            this.tbxSendKey = new System.Windows.Forms.TextBox();
             this.btnAllowedKeysRemoveAll = new System.Windows.Forms.Button();
             this.btnAllowedKeysRemove = new System.Windows.Forms.Button();
             this.btnAllowedKeysAdd = new System.Windows.Forms.Button();
@@ -52,8 +54,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.rtbxLog = new System.Windows.Forms.RichTextBox();
             this.btnClearLog = new System.Windows.Forms.Button();
-            this.tbxSendKey = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.tabControl.SuspendLayout();
             this.tabSetup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numServerPort)).BeginInit();
@@ -183,6 +183,15 @@
             this.gbxAllowedKeys.TabStop = false;
             this.gbxAllowedKeys.Text = "Keys to send";
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 214);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(58, 13);
+            this.label1.TabIndex = 20;
+            this.label1.Text = "Send Keys";
+            // 
             // btnAddAll
             // 
             this.btnAddAll.Location = new System.Drawing.Point(203, 46);
@@ -192,6 +201,15 @@
             this.btnAddAll.Text = "Add all";
             this.btnAddAll.UseVisualStyleBackColor = true;
             this.btnAddAll.Click += new System.EventHandler(this.btnAddAll_Click);
+            // 
+            // tbxSendKey
+            // 
+            this.tbxSendKey.BackColor = System.Drawing.Color.DarkRed;
+            this.tbxSendKey.Location = new System.Drawing.Point(70, 211);
+            this.tbxSendKey.Name = "tbxSendKey";
+            this.tbxSendKey.Size = new System.Drawing.Size(127, 20);
+            this.tbxSendKey.TabIndex = 19;
+            this.tbxSendKey.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbxSendKey_KeyDown);
             // 
             // btnAllowedKeysRemoveAll
             // 
@@ -331,24 +349,6 @@
             this.btnClearLog.Text = "Clear";
             this.btnClearLog.UseVisualStyleBackColor = true;
             this.btnClearLog.Click += new System.EventHandler(this.btnClearLog_Click);
-            // 
-            // tbxSendKey
-            // 
-            this.tbxSendKey.BackColor = System.Drawing.Color.DarkRed;
-            this.tbxSendKey.Location = new System.Drawing.Point(70, 211);
-            this.tbxSendKey.Name = "tbxSendKey";
-            this.tbxSendKey.Size = new System.Drawing.Size(127, 20);
-            this.tbxSendKey.TabIndex = 19;
-            this.tbxSendKey.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbxSendKey_KeyDown);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 214);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(58, 13);
-            this.label1.TabIndex = 20;
-            this.label1.Text = "Send Keys";
             // 
             // InputHiveClientForm
             // 

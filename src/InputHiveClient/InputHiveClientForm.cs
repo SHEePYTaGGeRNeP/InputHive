@@ -13,10 +13,12 @@ namespace InputHiveClient
         public static Queue<string> ChatQueue = new Queue<string>();
         private readonly InputHiveClientSystem _hiveClientSystem;
 
+        private const string _VERSION = "V 1.0";
 
         public InputHiveClientForm()
         {
             InitializeComponent();
+            this.Text = "Input Hive " + _VERSION;
             Timer lvTimer = new Timer { Interval = 500 };
             lvTimer.Tick += TimerOnTick;
             lvTimer.Start();
@@ -263,8 +265,8 @@ namespace InputHiveClient
             }));
             this.Invoke((MethodInvoker) (() =>
             {
-                this.Text = String.Format("Input Hive Client - Connected with: {0} as {1}",
-                    tbxServerIp.Text,_hiveClientSystem.Client.Username);
+                this.Text = String.Format("Input Hive Client {0} - Connected with: {1} as {2}",
+                   _VERSION, tbxServerIp.Text,_hiveClientSystem.Client.Username);
             }));
         }
         private void UpdateUiDisconnected()
@@ -299,7 +301,7 @@ namespace InputHiveClient
             }));
             this.Invoke((MethodInvoker)(() =>
             {
-                this.Text = "Input Hive Client";
+                this.Text = "Input Hive Client " + _VERSION;
             }));
         }
 

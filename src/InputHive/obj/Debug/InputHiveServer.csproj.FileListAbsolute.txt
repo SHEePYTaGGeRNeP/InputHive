@@ -7,3 +7,12 @@ C:\Users\Lorenzo\Source\Workspaces\Workspace\InputHive\InputHive\obj\Debug\Input
 C:\Users\Lorenzo\Source\Workspaces\Workspace\InputHive\InputHive\obj\Debug\InputHive.exe
 C:\Users\Lorenzo\Source\Workspaces\Workspace\InputHive\InputHive\obj\Debug\InputHive.pdb
 C:\Users\Lorenzo\Source\Workspaces\Workspace\InputHive\InputHive\obj\Debug\InputHiveServer.csprojResolveAssemblyReference.cache
+E:\GITHUB\InputHive\src\InputHive\obj\Debug\InputHive.exe
+E:\GITHUB\InputHive\src\InputHive\obj\Debug\InputHive.pdb
+E:\GITHUB\InputHive\src\InputHive\bin\Debug\InputHive.exe
+E:\GITHUB\InputHive\src\InputHive\bin\Debug\InputHive.pdb
+E:\GITHUB\InputHive\src\InputHive\bin\Debug\Scs.dll
+E:\GITHUB\InputHive\src\InputHive\obj\Debug\InputHiveServer.csprojResolveAssemblyReference.cache
+E:\GITHUB\InputHive\src\InputHive\obj\Debug\InputHive.InputHiveServerForm.resources
+E:\GITHUB\InputHive\src\InputHive\obj\Debug\InputHive.Properties.Resources.resources
+E:\GITHUB\InputHive\src\InputHive\obj\Debug\InputHiveServer.csproj.GenerateResource.Cache

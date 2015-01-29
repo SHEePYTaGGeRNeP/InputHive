@@ -17,6 +17,8 @@ namespace InputHive
         public static Queue<string> LoggingQueue = new Queue<string>();
         public static Queue<string> ChatQueue = new Queue<string>();
 
+        private const string _VERSION = "V 1.0";
+
         private void InputHiveServerForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             _hiveServerSystem.TurnServerOff();
@@ -24,6 +26,7 @@ namespace InputHive
         public InputHiveServerForm()
         {
             InitializeComponent();
+            this.Text = "Input Hive Server " + _VERSION;
             Timer lvThreadTimer = new Timer { Interval = 500 };
             lvThreadTimer.Tick += ThreadTimerOnTick;
             lvThreadTimer.Start();
