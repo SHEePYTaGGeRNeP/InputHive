@@ -1,0 +1,9 @@
+C:\Users\Lorenzo\Source\Workspaces\Workspace\InputHive\InputHiveClient\bin\Debug\InputHiveClient.exe
+C:\Users\Lorenzo\Source\Workspaces\Workspace\InputHive\InputHiveClient\bin\Debug\InputHiveClient.pdb
+C:\Users\Lorenzo\Source\Workspaces\Workspace\InputHive\InputHiveClient\bin\Debug\Scs.dll
+C:\Users\Lorenzo\Source\Workspaces\Workspace\InputHive\InputHiveClient\obj\Debug\InputHiveClient.Properties.Resources.resources
+C:\Users\Lorenzo\Source\Workspaces\Workspace\InputHive\InputHiveClient\obj\Debug\InputHiveClient.csproj.GenerateResource.Cache
+C:\Users\Lorenzo\Source\Workspaces\Workspace\InputHive\InputHiveClient\obj\Debug\InputHiveClient.exe
+C:\Users\Lorenzo\Source\Workspaces\Workspace\InputHive\InputHiveClient\obj\Debug\InputHiveClient.pdb
+C:\Users\Lorenzo\Source\Workspaces\Workspace\InputHive\InputHiveClient\obj\Debug\InputHiveClient.csprojResolveAssemblyReference.cache
+C:\Users\Lorenzo\Source\Workspaces\Workspace\InputHive\InputHiveClient\obj\Debug\InputHiveClient.InputHiveClientForm.resources
