@@ -54,6 +54,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.rtbxLog = new System.Windows.Forms.RichTextBox();
             this.btnClearLog = new System.Windows.Forms.Button();
+            this.btnViewScreen = new System.Windows.Forms.Button();
             this.tabControl.SuspendLayout();
             this.tabSetup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numServerPort)).BeginInit();
@@ -153,6 +154,7 @@
             // 
             // tabView
             // 
+            this.tabView.Controls.Add(this.btnViewScreen);
             this.tabView.Controls.Add(this.gbxAllowedKeys);
             this.tabView.Controls.Add(this.btnSendMessage);
             this.tabView.Controls.Add(this.tbxChatMessage);
@@ -350,6 +352,18 @@
             this.btnClearLog.UseVisualStyleBackColor = true;
             this.btnClearLog.Click += new System.EventHandler(this.btnClearLog_Click);
             // 
+            // btnViewScreen
+            // 
+            this.btnViewScreen.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnViewScreen.Location = new System.Drawing.Point(8, 6);
+            this.btnViewScreen.Name = "btnViewScreen";
+            this.btnViewScreen.Size = new System.Drawing.Size(156, 23);
+            this.btnViewScreen.TabIndex = 18;
+            this.btnViewScreen.Text = "View Screen";
+            this.btnViewScreen.UseVisualStyleBackColor = true;
+            this.btnViewScreen.Click += new System.EventHandler(this.btnViewScreen_Click);
+            // 
             // InputHiveClientForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -406,5 +420,6 @@
         private System.Windows.Forms.ComboBox cbxAllowedKeys;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox tbxSendKey;
+        private System.Windows.Forms.Button btnViewScreen;
     }
 }

@@ -28,10 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.rtbxLog = new System.Windows.Forms.RichTextBox();
             this.gbxServer = new System.Windows.Forms.GroupBox();
+            this.numScreenSharingRefreshRate = new System.Windows.Forms.NumericUpDown();
+            this.label7 = new System.Windows.Forms.Label();
+            this.chbxShareScreens = new System.Windows.Forms.CheckBox();
             this.chbxLogAll = new System.Windows.Forms.CheckBox();
             this.gbxSetupAllowedKeys = new System.Windows.Forms.GroupBox();
+            this.chbxSetupDefaultScreenSharing = new System.Windows.Forms.CheckBox();
             this.label3 = new System.Windows.Forms.Label();
             this.numSetupDefaultMinimumTime = new System.Windows.Forms.NumericUpDown();
             this.chbxSetupDefaultKeysAllowInput = new System.Windows.Forms.CheckBox();
@@ -56,6 +61,7 @@
             this.btnClearWindow = new System.Windows.Forms.Button();
             this.gbxAllowedKeys = new System.Windows.Forms.GroupBox();
             this.gbxViewClient = new System.Windows.Forms.GroupBox();
+            this.chbxViewScreenSharing = new System.Windows.Forms.CheckBox();
             this.label6 = new System.Windows.Forms.Label();
             this.numClientMinimumTime = new System.Windows.Forms.NumericUpDown();
             this.btnBan = new System.Windows.Forms.Button();
@@ -77,9 +83,10 @@
             this.rtbxChat = new System.Windows.Forms.RichTextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.lblServerStatus = new System.Windows.Forms.Label();
-            this.chbxSetupScreenSharing = new System.Windows.Forms.CheckBox();
-            this.chbxViewScreenSharing = new System.Windows.Forms.CheckBox();
+            this.ScreenSharingTimer = new System.Windows.Forms.Timer(this.components);
+            this.btnUpdateRefreshRate = new System.Windows.Forms.Button();
             this.gbxServer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numScreenSharingRefreshRate)).BeginInit();
             this.gbxSetupAllowedKeys.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numSetupDefaultMinimumTime)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numMaxClients)).BeginInit();
@@ -109,6 +116,10 @@
             this.gbxServer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbxServer.Controls.Add(this.btnUpdateRefreshRate);
+            this.gbxServer.Controls.Add(this.numScreenSharingRefreshRate);
+            this.gbxServer.Controls.Add(this.label7);
+            this.gbxServer.Controls.Add(this.chbxShareScreens);
             this.gbxServer.Controls.Add(this.chbxLogAll);
             this.gbxServer.Controls.Add(this.gbxSetupAllowedKeys);
             this.gbxServer.Controls.Add(this.chbxAllowConnections);
@@ -126,12 +137,56 @@
             this.gbxServer.TabStop = false;
             this.gbxServer.Text = "Server";
             // 
+            // numScreenSharingRefreshRate
+            // 
+            this.numScreenSharingRefreshRate.Location = new System.Drawing.Point(384, 142);
+            this.numScreenSharingRefreshRate.Maximum = new decimal(new int[] {
+            -559939585,
+            902409669,
+            54,
+            0});
+            this.numScreenSharingRefreshRate.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numScreenSharingRefreshRate.Name = "numScreenSharingRefreshRate";
+            this.numScreenSharingRefreshRate.Size = new System.Drawing.Size(80, 20);
+            this.numScreenSharingRefreshRate.TabIndex = 34;
+            this.numScreenSharingRefreshRate.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(381, 126);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(87, 13);
+            this.label7.TabIndex = 35;
+            this.label7.Text = "Refresh rate (ms)";
+            // 
+            // chbxShareScreens
+            // 
+            this.chbxShareScreens.AutoSize = true;
+            this.chbxShareScreens.Checked = true;
+            this.chbxShareScreens.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chbxShareScreens.Location = new System.Drawing.Point(384, 106);
+            this.chbxShareScreens.Name = "chbxShareScreens";
+            this.chbxShareScreens.Size = new System.Drawing.Size(91, 17);
+            this.chbxShareScreens.TabIndex = 36;
+            this.chbxShareScreens.Text = "Share Screen";
+            this.chbxShareScreens.UseVisualStyleBackColor = true;
+            this.chbxShareScreens.CheckedChanged += new System.EventHandler(this.chbxShareScreens_CheckedChanged);
+            // 
             // chbxLogAll
             // 
             this.chbxLogAll.AutoSize = true;
             this.chbxLogAll.Checked = true;
             this.chbxLogAll.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chbxLogAll.Location = new System.Drawing.Point(16, 284);
+            this.chbxLogAll.Location = new System.Drawing.Point(6, 294);
             this.chbxLogAll.Name = "chbxLogAll";
             this.chbxLogAll.Size = new System.Drawing.Size(152, 17);
             this.chbxLogAll.TabIndex = 23;
@@ -141,7 +196,7 @@
             // 
             // gbxSetupAllowedKeys
             // 
-            this.gbxSetupAllowedKeys.Controls.Add(this.chbxSetupScreenSharing);
+            this.gbxSetupAllowedKeys.Controls.Add(this.chbxSetupDefaultScreenSharing);
             this.gbxSetupAllowedKeys.Controls.Add(this.label3);
             this.gbxSetupAllowedKeys.Controls.Add(this.numSetupDefaultMinimumTime);
             this.gbxSetupAllowedKeys.Controls.Add(this.chbxSetupDefaultKeysAllowInput);
@@ -158,18 +213,31 @@
             this.gbxSetupAllowedKeys.TabStop = false;
             this.gbxSetupAllowedKeys.Text = "Default settings for new clients";
             // 
+            // chbxSetupDefaultScreenSharing
+            // 
+            this.chbxSetupDefaultScreenSharing.AutoSize = true;
+            this.chbxSetupDefaultScreenSharing.Checked = true;
+            this.chbxSetupDefaultScreenSharing.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chbxSetupDefaultScreenSharing.Location = new System.Drawing.Point(9, 87);
+            this.chbxSetupDefaultScreenSharing.Name = "chbxSetupDefaultScreenSharing";
+            this.chbxSetupDefaultScreenSharing.Size = new System.Drawing.Size(91, 17);
+            this.chbxSetupDefaultScreenSharing.TabIndex = 33;
+            this.chbxSetupDefaultScreenSharing.Text = "Share Screen";
+            this.chbxSetupDefaultScreenSharing.UseVisualStyleBackColor = true;
+            this.chbxSetupDefaultScreenSharing.CheckedChanged += new System.EventHandler(this.chbxSetupScreenSharing_CheckedChanged);
+            // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(7, 61);
+            this.label3.Location = new System.Drawing.Point(6, 38);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(74, 26);
+            this.label3.Size = new System.Drawing.Size(92, 13);
             this.label3.TabIndex = 32;
-            this.label3.Text = "Minimum time\r\nin milliseconds";
+            this.label3.Text = "Minimum time (ms)";
             // 
             // numSetupDefaultMinimumTime
             // 
-            this.numSetupDefaultMinimumTime.Location = new System.Drawing.Point(10, 90);
+            this.numSetupDefaultMinimumTime.Location = new System.Drawing.Point(9, 54);
             this.numSetupDefaultMinimumTime.Maximum = new decimal(new int[] {
             -559939585,
             902409669,
@@ -256,7 +324,7 @@
             this.chbxAllowConnections.AutoSize = true;
             this.chbxAllowConnections.Checked = true;
             this.chbxAllowConnections.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chbxAllowConnections.Location = new System.Drawing.Point(381, 154);
+            this.chbxAllowConnections.Location = new System.Drawing.Point(384, 254);
             this.chbxAllowConnections.Name = "chbxAllowConnections";
             this.chbxAllowConnections.Size = new System.Drawing.Size(112, 17);
             this.chbxAllowConnections.TabIndex = 11;
@@ -266,7 +334,7 @@
             // 
             // numMaxClients
             // 
-            this.numMaxClients.Location = new System.Drawing.Point(462, 113);
+            this.numMaxClients.Location = new System.Drawing.Point(462, 69);
             this.numMaxClients.Maximum = new decimal(new int[] {
             9999999,
             0,
@@ -280,7 +348,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(610, 65);
+            this.label4.Location = new System.Drawing.Point(610, 46);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(100, 13);
             this.label4.TabIndex = 9;
@@ -288,7 +356,7 @@
             // 
             // tbxIpAddress
             // 
-            this.tbxIpAddress.Location = new System.Drawing.Point(462, 62);
+            this.tbxIpAddress.Location = new System.Drawing.Point(462, 43);
             this.tbxIpAddress.Name = "tbxIpAddress";
             this.tbxIpAddress.Size = new System.Drawing.Size(142, 20);
             this.tbxIpAddress.TabIndex = 8;
@@ -296,15 +364,15 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(381, 38);
+            this.label2.Location = new System.Drawing.Point(381, 19);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(63, 91);
+            this.label2.Size = new System.Drawing.Size(63, 65);
             this.label2.TabIndex = 7;
-            this.label2.Text = "Port:\r\n\r\nIP Address:\r\n\r\n\r\n\r\nMax clients:";
+            this.label2.Text = "Port:\r\n\r\nIP Address:\r\n\r\nMax clients:";
             // 
             // numPort
             // 
-            this.numPort.Location = new System.Drawing.Point(462, 36);
+            this.numPort.Location = new System.Drawing.Point(462, 17);
             this.numPort.Maximum = new decimal(new int[] {
             99999999,
             0,
@@ -322,7 +390,7 @@
             // btnTurnServerOff
             // 
             this.btnTurnServerOff.Enabled = false;
-            this.btnTurnServerOff.Location = new System.Drawing.Point(524, 196);
+            this.btnTurnServerOff.Location = new System.Drawing.Point(524, 277);
             this.btnTurnServerOff.Name = "btnTurnServerOff";
             this.btnTurnServerOff.Size = new System.Drawing.Size(80, 40);
             this.btnTurnServerOff.TabIndex = 4;
@@ -332,7 +400,7 @@
             // 
             // btnTurnServerOn
             // 
-            this.btnTurnServerOn.Location = new System.Drawing.Point(381, 196);
+            this.btnTurnServerOn.Location = new System.Drawing.Point(384, 277);
             this.btnTurnServerOn.Name = "btnTurnServerOn";
             this.btnTurnServerOn.Size = new System.Drawing.Size(80, 40);
             this.btnTurnServerOn.TabIndex = 3;
@@ -437,18 +505,29 @@
             this.gbxViewClient.TabStop = false;
             this.gbxViewClient.Text = "Client";
             // 
+            // chbxViewScreenSharing
+            // 
+            this.chbxViewScreenSharing.AutoSize = true;
+            this.chbxViewScreenSharing.Location = new System.Drawing.Point(10, 109);
+            this.chbxViewScreenSharing.Name = "chbxViewScreenSharing";
+            this.chbxViewScreenSharing.Size = new System.Drawing.Size(91, 17);
+            this.chbxViewScreenSharing.TabIndex = 35;
+            this.chbxViewScreenSharing.Text = "Share Screen";
+            this.chbxViewScreenSharing.UseVisualStyleBackColor = false;
+            this.chbxViewScreenSharing.CheckedChanged += new System.EventHandler(this.chbxViewScreenSharing_CheckedChanged);
+            // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(14, 71);
+            this.label6.Location = new System.Drawing.Point(7, 47);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(74, 26);
+            this.label6.Size = new System.Drawing.Size(92, 13);
             this.label6.TabIndex = 34;
-            this.label6.Text = "Minimum time\r\nin milliseconds";
+            this.label6.Text = "Minimum time (ms)";
             // 
             // numClientMinimumTime
             // 
-            this.numClientMinimumTime.Location = new System.Drawing.Point(17, 100);
+            this.numClientMinimumTime.Location = new System.Drawing.Point(10, 63);
             this.numClientMinimumTime.Maximum = new decimal(new int[] {
             -559939585,
             902409669,
@@ -656,27 +735,19 @@
             this.lblServerStatus.TabIndex = 7;
             this.lblServerStatus.Text = "Offline";
             // 
-            // chbxSetupScreenSharing
+            // ScreenSharingTimer
             // 
-            this.chbxSetupScreenSharing.AutoSize = true;
-            this.chbxSetupScreenSharing.Checked = true;
-            this.chbxSetupScreenSharing.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chbxSetupScreenSharing.Location = new System.Drawing.Point(10, 41);
-            this.chbxSetupScreenSharing.Name = "chbxSetupScreenSharing";
-            this.chbxSetupScreenSharing.Size = new System.Drawing.Size(91, 17);
-            this.chbxSetupScreenSharing.TabIndex = 33;
-            this.chbxSetupScreenSharing.Text = "Share Screen";
-            this.chbxSetupScreenSharing.UseVisualStyleBackColor = true;
+            this.ScreenSharingTimer.Tick += new System.EventHandler(this.ScreenSharingTimer_Tick);
             // 
-            // chbxViewScreenSharing
+            // btnUpdateRefreshRate
             // 
-            this.chbxViewScreenSharing.AutoSize = true;
-            this.chbxViewScreenSharing.Location = new System.Drawing.Point(10, 50);
-            this.chbxViewScreenSharing.Name = "chbxViewScreenSharing";
-            this.chbxViewScreenSharing.Size = new System.Drawing.Size(91, 17);
-            this.chbxViewScreenSharing.TabIndex = 35;
-            this.chbxViewScreenSharing.Text = "Share Screen";
-            this.chbxViewScreenSharing.UseVisualStyleBackColor = false;
+            this.btnUpdateRefreshRate.Location = new System.Drawing.Point(470, 139);
+            this.btnUpdateRefreshRate.Name = "btnUpdateRefreshRate";
+            this.btnUpdateRefreshRate.Size = new System.Drawing.Size(75, 23);
+            this.btnUpdateRefreshRate.TabIndex = 34;
+            this.btnUpdateRefreshRate.Text = "Update";
+            this.btnUpdateRefreshRate.UseVisualStyleBackColor = true;
+            this.btnUpdateRefreshRate.Click += new System.EventHandler(this.btnUpdateRefreshRate_Click);
             // 
             // InputHiveServerForm
             // 
@@ -693,6 +764,7 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.InputHiveServerForm_FormClosing);
             this.gbxServer.ResumeLayout(false);
             this.gbxServer.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numScreenSharingRefreshRate)).EndInit();
             this.gbxSetupAllowedKeys.ResumeLayout(false);
             this.gbxSetupAllowedKeys.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numSetupDefaultMinimumTime)).EndInit();
@@ -757,13 +829,18 @@
         private System.Windows.Forms.ComboBox cbxSetupDefaultKeys;
         private System.Windows.Forms.CheckBox chbxSetupDefaultKeysAllowInput;
         private System.Windows.Forms.CheckBox chbxLogAll;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.NumericUpDown numSetupDefaultMinimumTime;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.NumericUpDown numClientMinimumTime;
         private System.Windows.Forms.Button btnClearWindow;
-        private System.Windows.Forms.CheckBox chbxSetupScreenSharing;
+        private System.Windows.Forms.CheckBox chbxSetupDefaultScreenSharing;
         private System.Windows.Forms.CheckBox chbxViewScreenSharing;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.NumericUpDown numScreenSharingRefreshRate;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.NumericUpDown numSetupDefaultMinimumTime;
+        private System.Windows.Forms.Timer ScreenSharingTimer;
+        private System.Windows.Forms.CheckBox chbxShareScreens;
+        private System.Windows.Forms.Button btnUpdateRefreshRate;
     }
 }
 

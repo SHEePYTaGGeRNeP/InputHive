@@ -34,12 +34,12 @@ namespace InputHive.Classes
         /// <summary>
         /// Empty InputHiveServerSystem constructor
         /// </summary>
-        public InputHiveServerSystem(bool pLogAll, bool pAllowInput, int pDefaultMinimumTime, bool pDefaultAllowInput)
+        public InputHiveServerSystem(bool pLogAll, bool pAllowInput, int pDefaultMinimumTime, bool pDefaultAllowInput, bool pDefaultShareScreens)
         {
             this.LogAll = pLogAll;
             this.AllowInput = pAllowInput;
 
-            this.Server = new HiveCommunicationServer(pDefaultMinimumTime, pDefaultAllowInput);
+            this.Server = new HiveCommunicationServer(pDefaultMinimumTime, pDefaultAllowInput, pDefaultShareScreens);
             this.Server.NewMessage += this.ServerOnNewMessage;
             this.Server.UpdateClientEvent += delegate { if (this.UpdateClientEvent != null) this.UpdateClientEvent.Invoke(); };
             this.DefaultAllowedKeys = new List<string>();

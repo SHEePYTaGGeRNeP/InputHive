@@ -11,7 +11,7 @@ namespace InputHive.Classes.Communication
         public IScsServerClient ClientInformation { get; set; }
         public string Username { get; set; }
         public bool AllowInput { get; set; }
-
+        public bool ShareScreens { get; set; }
         /// <summary>
         /// Use MinimumTimeCountdown for timer
         /// </summary>
@@ -28,11 +28,12 @@ namespace InputHive.Classes.Communication
 
         private readonly System.Windows.Forms.Timer _countdownTimer;
 
-        public HiveCommunicationServerClient(IScsServerClient pClientInformation, int pMinimumTime, bool pAllowInput)
+        public HiveCommunicationServerClient(IScsServerClient pClientInformation, int pMinimumTime, bool pAllowInput, bool pShareSceens)
         {
             this.ClientInformation = pClientInformation;
             this.MinimumTime = pMinimumTime;
             this.AllowInput = pAllowInput;
+            this.ShareScreens = pShareSceens;
             this.AllowedKeys = new List<string>();
             this._countdownTimer = new Timer();
             this._countdownTimer.Tick += this.CountdownTimerOnTick;

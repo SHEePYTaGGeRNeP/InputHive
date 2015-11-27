@@ -9,6 +9,12 @@ using Hik.Communication.Scs.Server;
 
 namespace InputHive.Classes.Communication
 {
+    using System.ComponentModel;
+    using System.Drawing;
+    using System.Drawing.Imaging;
+    using System.IO;
+    using System.Linq;
+
     internal class HiveCommunicationServer
     {
         public delegate void NewMessageHandler(ScsTextMessage pMessage, IScsServerClient pClient);
@@ -25,20 +31,22 @@ namespace InputHive.Classes.Communication
         public string IpAdres { get; set; }
         public bool AllowConnections { get; set; }
         public int MaximumClients { get; set; }
-
+        public int ScreenSharingRefreshRate { get; set; }
 
         public int DefaultMinimumTime { get; set; }
         public bool DefaultAllowInput { get; set; }
+        public bool DefaultShareScreens { get; set; }
 
         public List<HiveCommunicationServerClient> Clients { get; set; }
-        public List<string> BannedIps { get; set; } 
+        public List<string> BannedIps { get; set; }
 
         private bool ServerStarted { get; set; }
 
-        public HiveCommunicationServer(int pDefaultMinimumTime, bool pDefaultAllowInput)
+        public HiveCommunicationServer(int pDefaultMinimumTime, bool pDefaultAllowInput, bool pDefaultShareScreens)
         {
             this.DefaultMinimumTime = pDefaultMinimumTime;
             this.DefaultAllowInput = pDefaultAllowInput;
+            this.DefaultShareScreens = pDefaultShareScreens;
             this.Clients = new List<HiveCommunicationServerClient>();
             this.BannedIps = new List<string>();
         }
@@ -68,7 +76,7 @@ namespace InputHive.Classes.Communication
             this.Server.Start();
             this.ServerStarted = true;
             InputHiveServerForm.LoggingQueue.Enqueue(String.Format(
-                "{0} Started server succesfully on:\t{1} : {2}",DateTime.Now, this.IpAdres, this.ServerPort));
+                "{0} Started server succesfully on:\t{1} : {2}", DateTime.Now, this.IpAdres, this.ServerPort));
         }
         public void TurnServerOff()
         {
@@ -102,14 +110,14 @@ namespace InputHive.Classes.Communication
                     }
                     else if (this.AllowConnections == true)
                     {
-                        this.Clients.Add(new HiveCommunicationServerClient(e.Client, this.DefaultMinimumTime, this.DefaultAllowInput ));
+                        this.Clients.Add(new HiveCommunicationServerClient(e.Client, this.DefaultMinimumTime, this.DefaultAllowInput, this.DefaultShareScreens));
                         // eventhandler
                         e.Client.MessageReceived += this.Client_MessageReceived;
                     }
                     else
                     {
                         InputHiveServerForm.LoggingQueue.Enqueue(String.Format(
-                            "{0} Not allowing connections. DISCONNECTED WITH ClientID: {1}",DateTime.Now, e.Client.ClientId));
+                            "{0} Not allowing connections. DISCONNECTED WITH ClientID: {1}", DateTime.Now, e.Client.ClientId));
                         e.Client.SendMessage(new ScsTextMessage("notallow"));
                         e.Client.Disconnect();
                     }
@@ -118,7 +126,7 @@ namespace InputHive.Classes.Communication
             catch (Exception lvEx)
             {
                 InputHiveServerForm.LoggingQueue.Enqueue(String.Format(
-                    "{0} !-!-! ERROR: Error on new client connection: {1}",DateTime.Now, lvEx.Message));
+                    "{0} !-!-! ERROR: Error on new client connection: {1}", DateTime.Now, lvEx.Message));
                 throw new Exception("Error on new client connection:\n" + lvEx.Message);
             }
         }
@@ -130,7 +138,7 @@ namespace InputHive.Classes.Communication
                 if (lvClient != null)
                 {
                     InputHiveServerForm.LoggingQueue.Enqueue(String.Format(
-                        "{0} {1} disconnected. ID: {2} IP: {3}", DateTime.Now,lvClient.Username, 
+                        "{0} {1} disconnected. ID: {2} IP: {3}", DateTime.Now, lvClient.Username,
                         lvClient.ClientInformation.ClientId, lvClient.ClientInformation.RemoteEndPoint));
                     this.ChatToAllClients(String.Format("{0} disconnected.", lvClient.Username));
                     foreach (HiveCommunicationServerClient lvC in this.Clients)
@@ -178,7 +186,55 @@ namespace InputHive.Classes.Communication
                     lvClient.ClientInformation.SendMessage(new ScsTextMessage(pText));
                 }
         }
+        public void MessageClients(HiveCommunicationServerClient[] clients, string message)
+        {
+            foreach (HiveCommunicationServerClient c in clients)
+            {
+                if (c != null && c.ClientInformation.CommunicationState == CommunicationStates.Connected
+                    && !String.IsNullOrEmpty(c.Username))
+                    c.ClientInformation.SendMessage(new ScsTextMessage(message));
+            }
 
+        }
+
+        public void SendScreenshot()
+        {
+            Bitmap screenShot = Helper.TakeScreenshot();
+            screenShot = this.CompressImage(screenShot);
+            HiveCommunicationServerClient[] clients = this.Clients.FindAll(x => x.ShareScreens).ToArray();
+            this.MessageClients(clients, "screenshot:" + Helper.ImageToBase64(screenShot, ImageFormat.Jpeg));
+        }
+        private Bitmap CompressImage(Bitmap image)
+        {
+            //Or you do can use buil-in method
+            //ImageCodecInfo jgpEncoder GetEncoderInfo("image/gif");//"image/jpeg",...
+            ImageCodecInfo jgpEncoder = this.GetEncoder(ImageFormat.Jpeg);
+
+            // Create an Encoder object based on the GUID
+            // for the Quality parameter category.
+            System.Drawing.Imaging.Encoder myEncoder = System.Drawing.Imaging.Encoder.Quality;
+
+            // Create an EncoderParameters object.
+            // An EncoderParameters object has an array of EncoderParameter
+            // objects. In this case, there is only one
+            // EncoderParameter object in the array.
+            EncoderParameters myEncoderParameters = new EncoderParameters(1);
+
+            EncoderParameter myEncoderParameter = new EncoderParameter(myEncoder, 50L);
+            myEncoderParameters.Param[0] = myEncoderParameter;
+
+            MemoryStream ms = new MemoryStream();
+            image.Save(ms, jgpEncoder, myEncoderParameters);
+            ms.Seek(0, SeekOrigin.Begin);
+            Bitmap returnImage = new Bitmap(ms);
+            return returnImage;
+        }
+        private ImageCodecInfo GetEncoder(ImageFormat format)
+        {
+            ImageCodecInfo[] codecs = ImageCodecInfo.GetImageDecoders();
+
+            return codecs.FirstOrDefault(codec => codec.FormatID == format.Guid);
+        }
 
         public void KickClient(HiveCommunicationServerClient pClient)
         {

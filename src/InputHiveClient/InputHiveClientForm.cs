@@ -13,16 +13,19 @@ namespace InputHiveClient
         public static Queue<string> ChatQueue = new Queue<string>();
         private readonly InputHiveClientSystem _hiveClientSystem;
 
-        private const string _VERSION = "V 1.1";
+        private const string _VERSION = "V 2.0";
+
+        private InputHiveScreenView _screenView;
 
         public InputHiveClientForm()
         {
             this.InitializeComponent();
             this.Text = "Input Hive Client " + _VERSION;
+            this._screenView = new InputHiveScreenView();
             Timer lvTimer = new Timer { Interval = 500 };
             lvTimer.Tick += this.TimerOnTick;
             lvTimer.Start();
-            this._hiveClientSystem = new InputHiveClientSystem(new HiveCommunicationClient());
+            this._hiveClientSystem = new InputHiveClientSystem(new HiveCommunicationClient(), this._screenView);
             this._hiveClientSystem.OnUsernameConfirmed += this.HiveClientSystemOnOnUsernameConfirmed;
             this._hiveClientSystem.OnKeylistUpdate += this.HiveClientSystemOnOnKeylistUpdate;
         }
@@ -198,6 +201,10 @@ namespace InputHiveClient
         #region # # # # # # # # # # # # # # # #   E v e nt s   # # # # # # # # # # # # # # # #
 
 
+        private void btnViewScreen_Click(object sender, EventArgs e)
+        {
+            this._screenView.OpenForm();
+        }
 
         private void btnClearLog_Click(object sender, System.EventArgs e)
         {
@@ -305,13 +312,15 @@ namespace InputHiveClient
         }
 
 
+
+
+
+
+
+
+
+
         #endregion
-
-
-
-
-
-
 
     }
 }

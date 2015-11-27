@@ -6,11 +6,14 @@ using InputHiveClient.Classes.Communication;
 
 namespace InputHiveClient.Classes
 {
+    using System.Drawing;
+
     /// <summary>
     /// Gebruikt voor InputHiveClientForm
     /// </summary>
     class InputHiveClientSystem
     {
+        private readonly InputHiveScreenView _form;
         public HiveCommunicationClient Client { get; set; }
 
         public delegate void UsernameConfirmedHandler();
@@ -20,10 +23,11 @@ namespace InputHiveClient.Classes
         public event KeylistUpdateHandler OnKeylistUpdate;
 
 
-        public InputHiveClientSystem(HiveCommunicationClient pClient)
+        public InputHiveClientSystem(HiveCommunicationClient pClient, InputHiveScreenView form)
         {
             this.Client = pClient;
             this.Client.NewMessage += this.ClientOnNewMessage;
+            this._form = form;
         }
 
 
@@ -97,6 +101,11 @@ namespace InputHiveClient.Classes
                     break;
                 case "nosend": InputHiveClientForm.LoggingQueue.Enqueue(String.Format(
                     "{0} failed to send key. Server not allowing keys to be sent.", DateTime.Now));
+                    break;
+                case "screenshot":
+                    Image image = StaticHelper.Base64ToImage(lvSplit[1]);
+                    this._form.UpdateScreenShot(image);
+
                     break;
                 default:
                     InputHiveClientForm.ShowMessageBox("Unknown message:\n" + pMessage.Text, "Error",

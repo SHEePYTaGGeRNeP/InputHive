@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Threading;
-using System.Windows.Forms;
-using InputHive.Classes;
-using InputHive.Classes.Communication;
-using Timer = System.Windows.Forms.Timer;
-
-namespace InputHive
+﻿namespace InputHive
 {
+    using System.Linq;
+    using System;
+    using System.Collections.Generic;
+    using System.Drawing;
+    using System.Threading;
+    using System.Windows.Forms;
+    using InputHive.Classes;
+    using InputHive.Classes.Communication;
+    using Timer = System.Windows.Forms.Timer;
+
     public partial class InputHiveServerForm : Form
     {
         private readonly InputHiveServerSystem _hiveServerSystem;
@@ -17,7 +18,7 @@ namespace InputHive
         public static Queue<string> LoggingQueue = new Queue<string>();
         public static Queue<string> ChatQueue = new Queue<string>();
 
-        private const string _VERSION = "V 1.1";
+        private const string _VERSION = "V 2.0";
 
         private void InputHiveServerForm_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -32,7 +33,7 @@ namespace InputHive
             lvThreadTimer.Start();
             this.FillAllowedKeys();
             this._hiveServerSystem = new InputHiveServerSystem(this.chbxLogAll.Checked,
-                !this.chbxStopAllInput.Checked,(int)this.numSetupDefaultMinimumTime.Value, this.chbxSetupDefaultKeysAllowInput.Checked );
+                !this.chbxStopAllInput.Checked, (int)this.numSetupDefaultMinimumTime.Value, this.chbxSetupDefaultKeysAllowInput.Checked, this.chbxSetupDefaultScreenSharing.Checked);
             this._hiveServerSystem.UpdateClientEvent += this.HiveServerSystemOnUpdateClientEvent;
         }
 
@@ -63,6 +64,20 @@ namespace InputHive
             }
         }
 
+
+        private void ScreenSharingTimer_Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                if (this._hiveServerSystem.Server.Clients.Count(x => x.ShareScreens) < 1) return;
+                this._hiveServerSystem.Server.SendScreenshot();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Exception: " + ex.Message, "Unexcepted Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private void FillAllowedKeys()
         {
             foreach (Keys lvK in Enum.GetValues(typeof(Keys)))
@@ -82,6 +97,7 @@ namespace InputHive
             {
                 this._hiveServerSystem.TurnServerOn((int)this.numPort.Value, this.tbxIpAddress.Text, (int)this.numMaxClients.Value, this.chbxAllowConnections.Checked);
                 this.UpdateUiServerOn();
+                this.ScreenSharingTimer.Start();
             }
             catch (Exception lvException)
             {
@@ -89,11 +105,11 @@ namespace InputHive
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
         private void btnTurnServerOff_Click(object sender, EventArgs e)
         {
             try
             {
+                this.ScreenSharingTimer.Stop();
                 this._hiveServerSystem.TurnServerOff();
                 this.UpdateUiServerOff();
             }
@@ -108,6 +124,7 @@ namespace InputHive
         {
             this._hiveServerSystem.Server.MaximumClients = (int)this.numMaxClients.Value;
         }
+
         private void chbxAllowConnections_CheckedChanged(object sender, EventArgs e)
         {
             this._hiveServerSystem.Server.AllowConnections = this.chbxAllowConnections.Checked;
@@ -139,7 +156,7 @@ namespace InputHive
                 this._hiveServerSystem.DefaultAllowedKeys.Remove(lvKey);
             }
         }
-        
+
         private void chbxLogAll_CheckedChanged(object sender, EventArgs e)
         {
             this._hiveServerSystem.LogAll = this.chbxLogAll.Checked;
@@ -151,6 +168,22 @@ namespace InputHive
         private void chbxSetupDefaultKeysAllowInput_CheckedChanged(object sender, EventArgs e)
         {
             this._hiveServerSystem.Server.DefaultAllowInput = this.chbxSetupDefaultKeysAllowInput.Checked;
+        }
+        private void chbxSetupScreenSharing_CheckedChanged(object sender, EventArgs e)
+        {
+            this._hiveServerSystem.Server.DefaultShareScreens = this.chbxSetupDefaultScreenSharing.Checked;
+        }
+
+
+        private void chbxShareScreens_CheckedChanged(object sender, EventArgs e)
+        {
+            this.ScreenSharingTimer.Enabled = this.chbxShareScreens.Checked;
+        }
+
+        private void btnUpdateRefreshRate_Click(object sender, EventArgs e)
+        {
+            this.ScreenSharingTimer.Interval = (int)this.numScreenSharingRefreshRate.Value;
+
         }
         #endregion
 
@@ -255,7 +288,10 @@ namespace InputHive
         {
             this._selectedClient.AllowInput = this.chbxAllowInput.Checked;
         }
-
+        private void chbxViewScreenSharing_CheckedChanged(object sender, EventArgs e)
+        {
+            this._selectedClient.ShareScreens = this.chbxViewScreenSharing.Checked;
+        }
         private void btnKick_Click(object sender, EventArgs e)
         {
             if (DialogResult.Yes == MessageBox.Show("Are you sure you want to kick this client?\n"
@@ -351,47 +387,24 @@ namespace InputHive
             { this.gbxViewClient.Enabled = true; }));
             this.chbxAllowInput.Invoke((MethodInvoker)(() =>
             { this.chbxAllowInput.Checked = this._selectedClient.AllowInput; }));
+            this.chbxViewScreenSharing.Invoke((MethodInvoker)(() =>
+            { this.chbxViewScreenSharing.Checked = this._selectedClient.ShareScreens; }));
             this.lbxAllowedKeys.Invoke((MethodInvoker)(() =>
             {
                 foreach (string lvKey in this._selectedClient.AllowedKeys)
                     this.lbxAllowedKeys.Items.Add(lvKey);
             }));
-            this.numClientMinimumTime.Invoke((MethodInvoker) (() =>
-            {
-                this.numClientMinimumTime.Value = this._selectedClient.MinimumTime;
-            }));
+            this.numClientMinimumTime.Invoke((MethodInvoker)(() =>
+           {
+               this.numClientMinimumTime.Value = this._selectedClient.MinimumTime;
+           }));
 
         }
 
+
+
+
         #endregion
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     }
 }

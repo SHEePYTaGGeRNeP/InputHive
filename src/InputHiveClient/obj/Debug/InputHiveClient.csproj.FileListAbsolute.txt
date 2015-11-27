@@ -18,3 +18,11 @@ E:\GITHUB\InputHive\src\InputHiveClient\obj\Debug\InputHiveClient.Properties.Res
 E:\GITHUB\InputHive\src\InputHiveClient\obj\Debug\InputHiveClient.csproj.GenerateResource.Cache
 E:\DEV\GITHUB\InputHive\src\InputHiveClient\obj\Debug\InputHiveClient.exe
 E:\DEV\GITHUB\InputHive\src\InputHiveClient\obj\Debug\InputHiveClient.pdb
+E:\DEV\GITHUB\InputHive\src\InputHiveClient\bin\Debug\InputHiveClient.exe
+E:\DEV\GITHUB\InputHive\src\InputHiveClient\bin\Debug\InputHiveClient.pdb
+E:\DEV\GITHUB\InputHive\src\InputHiveClient\bin\Debug\Scs.dll
+E:\DEV\GITHUB\InputHive\src\InputHiveClient\obj\Debug\InputHiveClient.csprojResolveAssemblyReference.cache
+E:\DEV\GITHUB\InputHive\src\InputHiveClient\obj\Debug\InputHiveClient.InputHiveClientForm.resources
+E:\DEV\GITHUB\InputHive\src\InputHiveClient\obj\Debug\InputHiveClient.Properties.Resources.resources
+E:\DEV\GITHUB\InputHive\src\InputHiveClient\obj\Debug\InputHiveClient.csproj.GenerateResource.Cache
+E:\DEV\GITHUB\InputHive\src\InputHiveClient\obj\Debug\InputHiveClient.InputHiveScreenView.resources
