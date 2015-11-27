@@ -64,20 +64,7 @@
             }
         }
 
-
-        private void ScreenSharingTimer_Tick(object sender, EventArgs e)
-        {
-            try
-            {
-                if (this._hiveServerSystem.Server.Clients.Count(x => x.ShareScreens) < 1) return;
-                this._hiveServerSystem.Server.SendScreenshot();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Exception: " + ex.Message, "Unexcepted Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
+        
         private void FillAllowedKeys()
         {
             foreach (Keys lvK in Enum.GetValues(typeof(Keys)))
@@ -97,7 +84,7 @@
             {
                 this._hiveServerSystem.TurnServerOn((int)this.numPort.Value, this.tbxIpAddress.Text, (int)this.numMaxClients.Value, this.chbxAllowConnections.Checked);
                 this.UpdateUiServerOn();
-                this.ScreenSharingTimer.Start();
+                this._hiveServerSystem.ScreenSharingTimer.Start();
             }
             catch (Exception lvException)
             {
@@ -109,7 +96,7 @@
         {
             try
             {
-                this.ScreenSharingTimer.Stop();
+                this._hiveServerSystem.ScreenSharingTimer.Stop();
                 this._hiveServerSystem.TurnServerOff();
                 this.UpdateUiServerOff();
             }
@@ -177,14 +164,20 @@
 
         private void chbxShareScreens_CheckedChanged(object sender, EventArgs e)
         {
-            this.ScreenSharingTimer.Enabled = this.chbxShareScreens.Checked;
+            this._hiveServerSystem.ScreenSharingTimer.Enabled = this.chbxShareScreens.Checked;
         }
 
         private void btnUpdateRefreshRate_Click(object sender, EventArgs e)
         {
-            this.ScreenSharingTimer.Interval = (int)this.numScreenSharingRefreshRate.Value;
-
+            this._hiveServerSystem.ScreenSharingTimer.Interval = (int)this.numScreenSharingRefreshRate.Value;
         }
+        private void numScreenSharingRefreshRate_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+                this._hiveServerSystem.ScreenSharingTimer.Interval = (int)this.numScreenSharingRefreshRate.Value;
+        }
+
+
         #endregion
 
         private void AddKeyToDefaultList(string pKey)

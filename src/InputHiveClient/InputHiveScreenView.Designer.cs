@@ -40,6 +40,7 @@
             this.pbxScreenShot.Location = new System.Drawing.Point(0, 0);
             this.pbxScreenShot.Name = "pbxScreenShot";
             this.pbxScreenShot.Size = new System.Drawing.Size(425, 339);
+            this.pbxScreenShot.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbxScreenShot.TabIndex = 0;
             this.pbxScreenShot.TabStop = false;
             // 

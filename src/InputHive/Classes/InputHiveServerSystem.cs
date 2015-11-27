@@ -8,6 +8,9 @@ using InputHive.Classes.Communication;
 
 namespace InputHive.Classes
 {
+    using System.Linq;
+    using System.Timers;
+
     /// <summary>
     /// Gebruikt voor InputHiveServerForm
     /// </summary>
@@ -17,6 +20,8 @@ namespace InputHive.Classes
         public event UpdateClientListHandler UpdateClientEvent;
 
         public HiveCommunicationServer Server { get; private set; }
+
+        public Timer ScreenSharingTimer { get; set; } = new Timer(100) { AutoReset = true };
 
         /// <summary>
         /// Window / process in Windows
@@ -36,6 +41,7 @@ namespace InputHive.Classes
         /// </summary>
         public InputHiveServerSystem(bool pLogAll, bool pAllowInput, int pDefaultMinimumTime, bool pDefaultAllowInput, bool pDefaultShareScreens)
         {
+            this.ScreenSharingTimer.Elapsed += this.ScreenSharingTimer_Tick;
             this.LogAll = pLogAll;
             this.AllowInput = pAllowInput;
 
@@ -43,6 +49,20 @@ namespace InputHive.Classes
             this.Server.NewMessage += this.ServerOnNewMessage;
             this.Server.UpdateClientEvent += delegate { if (this.UpdateClientEvent != null) this.UpdateClientEvent.Invoke(); };
             this.DefaultAllowedKeys = new List<string>();
+        }
+
+
+        private void ScreenSharingTimer_Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                if (this.Server.Clients.Count(x => x.ShareScreens) < 1) return;
+                this.Server.SendScreenshot();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Exception: " + ex.Message, "Unexcepted Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void ServerOnNewMessage(ScsTextMessage pMessage, IScsServerClient pClient)

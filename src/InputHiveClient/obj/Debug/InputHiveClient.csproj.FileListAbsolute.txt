@@ -27,3 +27,4 @@ E:\DEV\GITHUB\InputHive\src\InputHiveClient\obj\Debug\InputHiveClient.Properties
 E:\DEV\GITHUB\InputHive\src\InputHiveClient\obj\Debug\InputHiveClient.csproj.GenerateResource.Cache
 E:\DEV\GITHUB\InputHive\src\InputHiveClient\obj\Debug\InputHiveClient.InputHiveScreenView.resources
 E:\GITHUB\InputHive\src\InputHiveClient\bin\Debug\InputHiveClient.exe.config
+E:\GITHUB\InputHive\src\InputHiveClient\obj\Debug\InputHiveClient.InputHiveScreenView.resources

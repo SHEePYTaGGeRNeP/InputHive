@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.rtbxLog = new System.Windows.Forms.RichTextBox();
             this.gbxServer = new System.Windows.Forms.GroupBox();
+            this.btnUpdateRefreshRate = new System.Windows.Forms.Button();
             this.numScreenSharingRefreshRate = new System.Windows.Forms.NumericUpDown();
             this.label7 = new System.Windows.Forms.Label();
             this.chbxShareScreens = new System.Windows.Forms.CheckBox();
@@ -83,8 +83,6 @@
             this.rtbxChat = new System.Windows.Forms.RichTextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.lblServerStatus = new System.Windows.Forms.Label();
-            this.ScreenSharingTimer = new System.Windows.Forms.Timer(this.components);
-            this.btnUpdateRefreshRate = new System.Windows.Forms.Button();
             this.gbxServer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numScreenSharingRefreshRate)).BeginInit();
             this.gbxSetupAllowedKeys.SuspendLayout();
@@ -137,6 +135,16 @@
             this.gbxServer.TabStop = false;
             this.gbxServer.Text = "Server";
             // 
+            // btnUpdateRefreshRate
+            // 
+            this.btnUpdateRefreshRate.Location = new System.Drawing.Point(470, 139);
+            this.btnUpdateRefreshRate.Name = "btnUpdateRefreshRate";
+            this.btnUpdateRefreshRate.Size = new System.Drawing.Size(75, 23);
+            this.btnUpdateRefreshRate.TabIndex = 34;
+            this.btnUpdateRefreshRate.Text = "Update";
+            this.btnUpdateRefreshRate.UseVisualStyleBackColor = true;
+            this.btnUpdateRefreshRate.Click += new System.EventHandler(this.btnUpdateRefreshRate_Click);
+            // 
             // numScreenSharingRefreshRate
             // 
             this.numScreenSharingRefreshRate.Location = new System.Drawing.Point(384, 142);
@@ -158,6 +166,7 @@
             0,
             0,
             0});
+            this.numScreenSharingRefreshRate.KeyDown += new System.Windows.Forms.KeyEventHandler(this.numScreenSharingRefreshRate_KeyDown);
             // 
             // label7
             // 
@@ -735,20 +744,6 @@
             this.lblServerStatus.TabIndex = 7;
             this.lblServerStatus.Text = "Offline";
             // 
-            // ScreenSharingTimer
-            // 
-            this.ScreenSharingTimer.Tick += new System.EventHandler(this.ScreenSharingTimer_Tick);
-            // 
-            // btnUpdateRefreshRate
-            // 
-            this.btnUpdateRefreshRate.Location = new System.Drawing.Point(470, 139);
-            this.btnUpdateRefreshRate.Name = "btnUpdateRefreshRate";
-            this.btnUpdateRefreshRate.Size = new System.Drawing.Size(75, 23);
-            this.btnUpdateRefreshRate.TabIndex = 34;
-            this.btnUpdateRefreshRate.Text = "Update";
-            this.btnUpdateRefreshRate.UseVisualStyleBackColor = true;
-            this.btnUpdateRefreshRate.Click += new System.EventHandler(this.btnUpdateRefreshRate_Click);
-            // 
             // InputHiveServerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -838,7 +833,6 @@
         private System.Windows.Forms.NumericUpDown numScreenSharingRefreshRate;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.NumericUpDown numSetupDefaultMinimumTime;
-        private System.Windows.Forms.Timer ScreenSharingTimer;
         private System.Windows.Forms.CheckBox chbxShareScreens;
         private System.Windows.Forms.Button btnUpdateRefreshRate;
     }
