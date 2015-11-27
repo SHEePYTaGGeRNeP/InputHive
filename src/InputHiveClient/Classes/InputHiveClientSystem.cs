@@ -22,20 +22,20 @@ namespace InputHiveClient.Classes
 
         public InputHiveClientSystem(HiveCommunicationClient pClient)
         {
-            Client = pClient;
-            Client.NewMessage += ClientOnNewMessage;
+            this.Client = pClient;
+            this.Client.NewMessage += this.ClientOnNewMessage;
         }
 
 
         public void Connect(string pIp, int pPort, string pUsername)
         {
-            Client.Connect(pIp, pPort);
-            Client.Username = pUsername.Trim();
-            Client.SendMessage("username:" + Client.Username);
+            this.Client.Connect(pIp, pPort);
+            this.Client.Username = pUsername.Trim();
+            this.Client.SendMessage("username:" + this.Client.Username);
         }
         public void Disconnect()
         {
-            Client.Disconnect();
+            this.Client.Disconnect();
         }
 
         /// <summary>
@@ -50,8 +50,8 @@ namespace InputHiveClient.Classes
                 case "username":
                     if (lvSplit[1].ToLower() == "ok")
                     {
-                        Client.UsernameConfirmed = true;
-                        if (OnUsernameConfirmed != null) OnUsernameConfirmed.Invoke();
+                        this.Client.UsernameConfirmed = true;
+                        if (this.OnUsernameConfirmed != null) this.OnUsernameConfirmed.Invoke();
                     }
                     else if (lvSplit[1].ToLower() == "error")
                         InputHiveClientForm.ShowMessageBox("Username is not valid.", "Username is not valid",
@@ -62,26 +62,27 @@ namespace InputHiveClient.Classes
                     InputHiveClientForm.ChatQueue.Enqueue(lvText);
                     break;
                 case "full":
-                    Client.Disconnect();
+                    this.Client.Disconnect();
                     InputHiveClientForm.ShowMessageBox("The server is full.", "Server is full",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     break;
                 case "notallow":
-                    Client.Disconnect();
+                    this.Client.Disconnect();
                     InputHiveClientForm.ShowMessageBox("The server is not allowing any new clients.",
                     "Not allowed to join", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     break;
                 case "kick":
-                    Client.Disconnect();
+                    this.Client.Disconnect();
                     InputHiveClientForm.ShowMessageBox("You have been kicked from the server.",
                     "Kicked", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     break;
                 case "ban":
-                    Client.Disconnect();
+                    this.Client.Disconnect();
                     InputHiveClientForm.ShowMessageBox("You have been banned from the server.",
                     "Banned", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     break;
-                case "keylist": AddNewKeyList(pMessage.Text.Remove(0, 8));
+                case "keylist":
+                    this.AddNewKeyList(pMessage.Text.Remove(0, 8));
                     InputHiveClientForm.LoggingQueue.Enqueue(String.Format(
                         "{0} Received keylist update.", DateTime.Now));
                     break;
@@ -106,11 +107,11 @@ namespace InputHiveClient.Classes
 
         private void AddNewKeyList(string pKeylist)
         {
-            Client.AllowedKeys.Clear();
+            this.Client.AllowedKeys.Clear();
             string[] lvSplit = pKeylist.Split(',');
             foreach (string lvKey in lvSplit.Where(pKey => !String.IsNullOrEmpty(pKey)))
-                Client.AllowedKeys.Add(lvKey.Trim());
-            if (OnKeylistUpdate != null) OnKeylistUpdate.Invoke();
+                this.Client.AllowedKeys.Add(lvKey.Trim());
+            if (this.OnKeylistUpdate != null) this.OnKeylistUpdate.Invoke();
         }
 
         /// <summary>
@@ -119,9 +120,9 @@ namespace InputHiveClient.Classes
         /// <param name="pKey"></param>
         public void SendKey(string pKey)
         {
-            if (Client.AllowedKeys.Contains(pKey))
+            if (this.Client.AllowedKeys.Contains(pKey))
             {
-                Client.SendMessage("key:" + pKey);
+                this.Client.SendMessage("key:" + pKey);
                 InputHiveClientForm.LoggingQueue.Enqueue(String.Format("{0} sent key {1}.", DateTime.Now, pKey));
             }
             else
@@ -131,7 +132,7 @@ namespace InputHiveClient.Classes
 
         public void SendChatMessage(string pMessage)
         {
-            Client.SendMessage("chat:" + DateTime.Now + " " + pMessage);
+            this.Client.SendMessage("chat:" + DateTime.Now + " " + pMessage);
         }
 
     }

@@ -17,14 +17,14 @@ namespace InputHiveClient
 
         public InputHiveClientForm()
         {
-            InitializeComponent();
+            this.InitializeComponent();
             this.Text = "Input Hive Client " + _VERSION;
             Timer lvTimer = new Timer { Interval = 500 };
-            lvTimer.Tick += TimerOnTick;
+            lvTimer.Tick += this.TimerOnTick;
             lvTimer.Start();
-            _hiveClientSystem = new InputHiveClientSystem(new HiveCommunicationClient());
-            _hiveClientSystem.OnUsernameConfirmed += HiveClientSystemOnOnUsernameConfirmed;
-            _hiveClientSystem.OnKeylistUpdate += HiveClientSystemOnOnKeylistUpdate;
+            this._hiveClientSystem = new InputHiveClientSystem(new HiveCommunicationClient());
+            this._hiveClientSystem.OnUsernameConfirmed += this.HiveClientSystemOnOnUsernameConfirmed;
+            this._hiveClientSystem.OnKeylistUpdate += this.HiveClientSystemOnOnKeylistUpdate;
         }
 
 
@@ -33,27 +33,27 @@ namespace InputHiveClient
         {
             while (LoggingQueue.Count > 0)
             {
-                rtbxLog.AppendText(LoggingQueue.Dequeue() + "\n");
-                rtbxLog.SelectionStart = rtbxLog.Text.Length;
-                rtbxLog.ScrollToCaret();
+                this.rtbxLog.AppendText(LoggingQueue.Dequeue() + "\n");
+                this.rtbxLog.SelectionStart = this.rtbxLog.Text.Length;
+                this.rtbxLog.ScrollToCaret();
             }
             while (ChatQueue.Count > 0)
             {
-                rtbxChat.AppendText(ChatQueue.Dequeue() + "\n");
-                rtbxChat.SelectionStart = rtbxChat.Text.Length;
-                rtbxChat.ScrollToCaret();
+                this.rtbxChat.AppendText(ChatQueue.Dequeue() + "\n");
+                this.rtbxChat.SelectionStart = this.rtbxChat.Text.Length;
+                this.rtbxChat.ScrollToCaret();
             }
         }
 
 
         private void HiveClientSystemOnOnUsernameConfirmed()
         {
-            UpdateUiConnected();
+            this.UpdateUiConnected();
         }
 
         private void InputHiveClientForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            _hiveClientSystem.Client.Disconnect();
+            this._hiveClientSystem.Client.Disconnect();
         }
 
         private void InputHiveClientForm_KeyDown(object sender, KeyEventArgs e)
@@ -77,22 +77,22 @@ namespace InputHiveClient
             try
             {
                 Cursor.Current = Cursors.WaitCursor;
-                if (String.IsNullOrEmpty(tbxServerIp.Text))
+                if (String.IsNullOrEmpty(this.tbxServerIp.Text))
                 {
                     MessageBox.Show("IP Address cannot be empty", "Not all fields are filled in", MessageBoxButtons.OK,
                         MessageBoxIcon.Information);
                     return;
                 }
-                if (String.IsNullOrEmpty(tbxUsername.Text))
+                if (String.IsNullOrEmpty(this.tbxUsername.Text))
                     MessageBox.Show("Username cannot be empty", "Not all fields are filled in", MessageBoxButtons.OK,
                         MessageBoxIcon.Information);
-                else if (tbxUsername.Text.ToLower() == "server")
+                else if (this.tbxUsername.Text.ToLower() == "server")
                     MessageBox.Show("Server is not allowed as a username", "Cheeky bastard", MessageBoxButtons.OK,
                         MessageBoxIcon.Information);
                 else
                 {
-                    _hiveClientSystem.Connect(tbxServerIp.Text, (int)numServerPort.Value, tbxUsername.Text);
-                    _hiveClientSystem.Client.ClientInformation.Disconnected += delegate { UpdateUiDisconnected(); };
+                    this._hiveClientSystem.Connect(this.tbxServerIp.Text, (int)this.numServerPort.Value, this.tbxUsername.Text);
+                    this._hiveClientSystem.Client.ClientInformation.Disconnected += delegate { this.UpdateUiDisconnected(); };
                 }
             }
             catch (Exception lvException)
@@ -109,8 +109,8 @@ namespace InputHiveClient
         {
             try
             {
-                _hiveClientSystem.Disconnect();
-                UpdateUiDisconnected();
+                this._hiveClientSystem.Disconnect();
+                this.UpdateUiDisconnected();
             }
             catch (Exception lvException)
             {
@@ -121,10 +121,10 @@ namespace InputHiveClient
 
         private void btnSendMessage_Click(object sender, EventArgs e)
         {
-            if (!String.IsNullOrEmpty(tbxChatMessage.Text))
+            if (!String.IsNullOrEmpty(this.tbxChatMessage.Text))
             {
-                _hiveClientSystem.SendChatMessage(tbxChatMessage.Text);
-                tbxChatMessage.Clear();
+                this._hiveClientSystem.SendChatMessage(this.tbxChatMessage.Text);
+                this.tbxChatMessage.Clear();
             }
             else
                 MessageBox.Show("Please fill in your message.", "Empty message", MessageBoxButtons.OK,
@@ -139,27 +139,27 @@ namespace InputHiveClient
         #region # # # # # # # # # # # # # # # #   E v e n t s   # # # # # # # # # # # # # # # #
         private void btnAllowedKeysAdd_Click(object sender, EventArgs e)
         {
-            AddKeyToList(cbxAllowedKeys.Text);
+            this.AddKeyToList(this.cbxAllowedKeys.Text);
         }
         private void btnAddAll_Click(object sender, EventArgs e)
         {
-            foreach (var lvKey in cbxAllowedKeys.Items)
-                AddKeyToList(lvKey.ToString());
+            foreach (var lvKey in this.cbxAllowedKeys.Items)
+                this.AddKeyToList(lvKey.ToString());
         }
 
         private void btnAllowedKeysRemoveAll_Click(object sender, EventArgs e)
         {
-            lbxSendingKeys.Items.Clear();
+            this.lbxSendingKeys.Items.Clear();
         }
         private void btnAllowedKeysRemove_Click(object sender, EventArgs e)
         {
             List<string> lvList = new List<string>();
-            if (lbxSendingKeys.SelectedItems.Count > 0)
-                foreach (string lvKey in lbxSendingKeys.SelectedItems)
+            if (this.lbxSendingKeys.SelectedItems.Count > 0)
+                foreach (string lvKey in this.lbxSendingKeys.SelectedItems)
                     lvList.Add(lvKey);
             foreach (string lvKey in lvList)
             {
-                lbxSendingKeys.Items.Remove(lvKey);
+                this.lbxSendingKeys.Items.Remove(lvKey);
 
             }
         }
@@ -168,25 +168,25 @@ namespace InputHiveClient
         private void tbxSendKey_KeyDown(object sender, KeyEventArgs e)
         {
             string lvKeyString = char.ToUpper((char)e.KeyCode).ToString();
-            SendKey(lvKeyString);
-            tbxSendKey.Clear();
+            this.SendKey(lvKeyString);
+            this.tbxSendKey.Clear();
         }
 
         #endregion
 
         private void AddKeyToList(string pKey)
         {
-            if (!String.IsNullOrEmpty(pKey) && !lbxSendingKeys.Items.Contains(pKey))
-                lbxSendingKeys.Items.Add(pKey);
+            if (!String.IsNullOrEmpty(pKey) && !this.lbxSendingKeys.Items.Contains(pKey))
+                this.lbxSendingKeys.Items.Add(pKey);
         }
 
         private void HiveClientSystemOnOnKeylistUpdate()
         {
-            cbxAllowedKeys.Invoke((MethodInvoker)(() =>
+            this.cbxAllowedKeys.Invoke((MethodInvoker)(() =>
             {
-                cbxAllowedKeys.Items.Clear();
-                foreach (string lvKey in _hiveClientSystem.Client.AllowedKeys)
-                    cbxAllowedKeys.Items.Add(lvKey);
+                this.cbxAllowedKeys.Items.Clear();
+                foreach (string lvKey in this._hiveClientSystem.Client.AllowedKeys)
+                    this.cbxAllowedKeys.Items.Add(lvKey);
             }));
 
         }
@@ -201,11 +201,11 @@ namespace InputHiveClient
 
         private void btnClearLog_Click(object sender, System.EventArgs e)
         {
-            rtbxLog.Clear();
+            this.rtbxLog.Clear();
         }
         private void btnClearChat_Click(object sender, System.EventArgs e)
         {
-            rtbxChat.Clear();
+            this.rtbxChat.Clear();
         }
 
 
@@ -217,11 +217,11 @@ namespace InputHiveClient
         /// <param name="e"></param>
         private void SendKey(string pKey)
         {
-            if (_hiveClientSystem.Client.UsernameConfirmed == true)
+            if (this._hiveClientSystem.Client.UsernameConfirmed == true)
             {
-                if (lbxSendingKeys.Items.Contains(pKey.ToString()))
+                if (this.lbxSendingKeys.Items.Contains(pKey.ToString()))
                 {
-                    _hiveClientSystem.SendKey(pKey);
+                    this._hiveClientSystem.SendKey(pKey);
                 }
                 else
                     LoggingQueue.Enqueue(String.Format("{0} failed to send key {1} - You did not add this key to the list yet.",
@@ -234,70 +234,69 @@ namespace InputHiveClient
 
         private void UpdateUiConnected()
         {
-            lblConnectionStatus.Invoke((MethodInvoker)(() =>
+            this.lblConnectionStatus.Invoke((MethodInvoker)(() =>
             {
-                lblConnectionStatus.ForeColor = Color.Green;
-                lblConnectionStatus.Text = string.Format("Connected to: IP:{0} | Port: {1}",
-                    tbxServerIp.Text, numServerPort.Value);
+                this.lblConnectionStatus.ForeColor = Color.Green;
+                this.lblConnectionStatus.Text = string.Format("Connected to: IP:{0} | Port: {1}", this.tbxServerIp.Text, this.numServerPort.Value);
             }));
-            btnSendMessage.Invoke((MethodInvoker)(() =>
-            { btnSendMessage.Enabled = true; }));
-            btnClearChat.Invoke((MethodInvoker)(() =>
-            { btnClearChat.Enabled = true; }));
-            btnDisconnect.Invoke((MethodInvoker)(() =>
-            { btnDisconnect.Enabled = true; }));
-            btnConnect.Invoke((MethodInvoker)(() =>
-            { btnConnect.Enabled = false; }));
-            tbxChatMessage.Invoke((MethodInvoker)(() =>
-            { tbxChatMessage.ReadOnly = false; }));
-            tbxUsername.Invoke((MethodInvoker)(() =>
-            { tbxUsername.Enabled = true; }));
-            tbxServerIp.Invoke((MethodInvoker)(() =>
-            { tbxServerIp.ReadOnly = true; }));
-            tbxUsername.Invoke((MethodInvoker)(() =>
-            { tbxUsername.ReadOnly = true; }));
-            numServerPort.Invoke((MethodInvoker)(() =>
-            { numServerPort.ReadOnly = true; }));
-            tbxSendKey.Invoke((MethodInvoker)(() =>
+            this.btnSendMessage.Invoke((MethodInvoker)(() =>
+            { this.btnSendMessage.Enabled = true; }));
+            this.btnClearChat.Invoke((MethodInvoker)(() =>
+            { this.btnClearChat.Enabled = true; }));
+            this.btnDisconnect.Invoke((MethodInvoker)(() =>
+            { this.btnDisconnect.Enabled = true; }));
+            this.btnConnect.Invoke((MethodInvoker)(() =>
+            { this.btnConnect.Enabled = false; }));
+            this.tbxChatMessage.Invoke((MethodInvoker)(() =>
+            { this.tbxChatMessage.ReadOnly = false; }));
+            this.tbxUsername.Invoke((MethodInvoker)(() =>
+            { this.tbxUsername.Enabled = true; }));
+            this.tbxServerIp.Invoke((MethodInvoker)(() =>
+            { this.tbxServerIp.ReadOnly = true; }));
+            this.tbxUsername.Invoke((MethodInvoker)(() =>
+            { this.tbxUsername.ReadOnly = true; }));
+            this.numServerPort.Invoke((MethodInvoker)(() =>
+            { this.numServerPort.ReadOnly = true; }));
+            this.tbxSendKey.Invoke((MethodInvoker)(() =>
             {
-                tbxSendKey.Enabled = true;
-                tbxSendKey.BackColor = Color.LawnGreen;
+                this.tbxSendKey.Enabled = true;
+                this.tbxSendKey.BackColor = Color.LawnGreen;
             }));
             this.Invoke((MethodInvoker) (() =>
             {
                 this.Text = String.Format("Input Hive Client {0} - Connected with: {1} as {2}",
-                   _VERSION, tbxServerIp.Text,_hiveClientSystem.Client.Username);
+                   _VERSION, this.tbxServerIp.Text, this._hiveClientSystem.Client.Username);
             }));
         }
         private void UpdateUiDisconnected()
         {
-            lblConnectionStatus.Invoke((MethodInvoker)(() =>
+            this.lblConnectionStatus.Invoke((MethodInvoker)(() =>
             {
-                lblConnectionStatus.ForeColor = Color.DarkRed;
-                lblConnectionStatus.Text = "Offline";
+                this.lblConnectionStatus.ForeColor = Color.DarkRed;
+                this.lblConnectionStatus.Text = "Offline";
             }));
-            btnSendMessage.Invoke((MethodInvoker)(() =>
-            { btnSendMessage.Enabled = false; }));
-            btnClearChat.Invoke((MethodInvoker)(() =>
-            { btnClearChat.Enabled = false; }));
-            btnDisconnect.Invoke((MethodInvoker)(() =>
-            { btnDisconnect.Enabled = false; }));
-            btnConnect.Invoke((MethodInvoker)(() =>
-            { btnConnect.Enabled = true; }));
-            tbxChatMessage.Invoke((MethodInvoker)(() =>
-            { tbxChatMessage.ReadOnly = true; }));
-            tbxUsername.Invoke((MethodInvoker)(() =>
-            { tbxUsername.Enabled = false; }));
-            tbxServerIp.Invoke((MethodInvoker)(() =>
-            { tbxServerIp.ReadOnly = false; }));
-            tbxUsername.Invoke((MethodInvoker)(() =>
-            { tbxUsername.ReadOnly = false; }));
-            numServerPort.Invoke((MethodInvoker)(() =>
-            { numServerPort.ReadOnly = false; }));
-            tbxSendKey.Invoke((MethodInvoker)(() =>
+            this.btnSendMessage.Invoke((MethodInvoker)(() =>
+            { this.btnSendMessage.Enabled = false; }));
+            this.btnClearChat.Invoke((MethodInvoker)(() =>
+            { this.btnClearChat.Enabled = false; }));
+            this.btnDisconnect.Invoke((MethodInvoker)(() =>
+            { this.btnDisconnect.Enabled = false; }));
+            this.btnConnect.Invoke((MethodInvoker)(() =>
+            { this.btnConnect.Enabled = true; }));
+            this.tbxChatMessage.Invoke((MethodInvoker)(() =>
+            { this.tbxChatMessage.ReadOnly = true; }));
+            this.tbxUsername.Invoke((MethodInvoker)(() =>
+            { this.tbxUsername.Enabled = false; }));
+            this.tbxServerIp.Invoke((MethodInvoker)(() =>
+            { this.tbxServerIp.ReadOnly = false; }));
+            this.tbxUsername.Invoke((MethodInvoker)(() =>
+            { this.tbxUsername.ReadOnly = false; }));
+            this.numServerPort.Invoke((MethodInvoker)(() =>
+            { this.numServerPort.ReadOnly = false; }));
+            this.tbxSendKey.Invoke((MethodInvoker)(() =>
             {
-                tbxSendKey.Enabled = false;
-                tbxSendKey.BackColor = Color.DarkRed;
+                this.tbxSendKey.Enabled = false;
+                this.tbxSendKey.BackColor = Color.DarkRed;
             }));
             this.Invoke((MethodInvoker)(() =>
             {

@@ -16,3 +16,5 @@ E:\GITHUB\InputHive\src\InputHiveClient\obj\Debug\InputHiveClient.csprojResolveA
 E:\GITHUB\InputHive\src\InputHiveClient\obj\Debug\InputHiveClient.InputHiveClientForm.resources
 E:\GITHUB\InputHive\src\InputHiveClient\obj\Debug\InputHiveClient.Properties.Resources.resources
 E:\GITHUB\InputHive\src\InputHiveClient\obj\Debug\InputHiveClient.csproj.GenerateResource.Cache
+E:\DEV\GITHUB\InputHive\src\InputHiveClient\obj\Debug\InputHiveClient.exe
+E:\DEV\GITHUB\InputHive\src\InputHiveClient\obj\Debug\InputHiveClient.pdb

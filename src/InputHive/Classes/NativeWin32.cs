@@ -12,8 +12,8 @@ namespace InputHive.Classes
             public string Title;
             public ProcessWindow(IntPtr pHwnd, string pTitle)
             {
-                HWnd = pHwnd;
-                Title = pTitle;
+                this.HWnd = pHwnd;
+                this.Title = pTitle;
             }
         }
 

@@ -36,45 +36,46 @@ namespace InputHive.Classes
         /// </summary>
         public InputHiveServerSystem(bool pLogAll, bool pAllowInput, int pDefaultMinimumTime, bool pDefaultAllowInput)
         {
-            LogAll = pLogAll;
-            AllowInput = pAllowInput;
+            this.LogAll = pLogAll;
+            this.AllowInput = pAllowInput;
 
-            Server = new HiveCommunicationServer(pDefaultMinimumTime, pDefaultAllowInput);
-            Server.NewMessage += ServerOnNewMessage;
-            Server.UpdateClientEvent += delegate { if (UpdateClientEvent != null) UpdateClientEvent.Invoke(); };
-            DefaultAllowedKeys = new List<string>();
+            this.Server = new HiveCommunicationServer(pDefaultMinimumTime, pDefaultAllowInput);
+            this.Server.NewMessage += this.ServerOnNewMessage;
+            this.Server.UpdateClientEvent += delegate { if (this.UpdateClientEvent != null) this.UpdateClientEvent.Invoke(); };
+            this.DefaultAllowedKeys = new List<string>();
         }
 
         private void ServerOnNewMessage(ScsTextMessage pMessage, IScsServerClient pClient)
         {
             try
             {
-                if (LogAll == true)
+                if (this.LogAll == true)
                     InputHiveServerForm.LoggingQueue.Enqueue(String.Format(
-                        "{0} Received message from: {1} - {2} ", DateTime.Now, Server.FindClient(pClient.ClientId), pMessage.Text));
+                        "{0} Received message from: {1} - {2} ", DateTime.Now, this.Server.FindClient(pClient.ClientId), pMessage.Text));
                 string[] lvSplit = pMessage.Text.Split(':');
                 switch (lvSplit[0].ToLower())
                 {
                     case "username":
-                        if (Server.FindClient(lvSplit[1]) == null && lvSplit[1].ToLower() != "server"
+                        if (this.Server.FindClient(lvSplit[1]) == null && lvSplit[1].ToLower() != "server"
                             && !String.IsNullOrEmpty(lvSplit[1]))
                         {
-                            Server.FindClient(pClient.ClientId).Username = lvSplit[1];
+                            this.Server.FindClient(pClient.ClientId).Username = lvSplit[1];
                             pClient.SendMessage(new ScsTextMessage("username:ok"));
-                            Server.ChatToAllClients(lvSplit[1] + " joined the server.");
+                            this.Server.ChatToAllClients(lvSplit[1] + " joined the server.");
                             InputHiveServerForm.LoggingQueue.Enqueue(String.Format("{0} {1} joined the server.",
                                 DateTime.Now, lvSplit[1]));
-                            if (UpdateClientEvent != null) UpdateClientEvent.Invoke();
-                            UpdateKeyListToClient(Server.FindClient(pClient.ClientId), DefaultAllowedKeys.ToArray());
-                            Server.FindClient(pClient.ClientId).AllowedKeys = new List<string>(DefaultAllowedKeys);
+                            if (this.UpdateClientEvent != null) this.UpdateClientEvent.Invoke();
+                            this.UpdateKeyListToClient(this.Server.FindClient(pClient.ClientId), this.DefaultAllowedKeys.ToArray());
+                            this.Server.FindClient(pClient.ClientId).AllowedKeys = new List<string>(this.DefaultAllowedKeys);
                         }
                         else
                             pClient.SendMessage(new ScsTextMessage("username:error"));
                         break;
-                    case "chat": Server.ChatToAllClients(string.Format("{0} {1}: {2}", DateTime.Now,
-                       Server.FindClient(pClient.ClientId).Username, pMessage.Text.Remove(0, 5)));
+                    case "chat":
+                        this.Server.ChatToAllClients(string.Format("{0} {1}: {2}", DateTime.Now, this.Server.FindClient(pClient.ClientId).Username, pMessage.Text.Remove(0, 5)));
                         break;
-                    case "key": SendKey(lvSplit[1].Trim(), Server.FindClient(pClient.ClientId));
+                    case "key":
+                        this.SendKey(lvSplit[1].Trim(), this.Server.FindClient(pClient.ClientId));
                         break;
                     default: throw new Exception();
                 }
@@ -83,7 +84,7 @@ namespace InputHive.Classes
             {
                 InputHiveServerForm.LoggingQueue.Enqueue(String.Format(
                     "{0} !-!-! ERROR: Error processing message: {1} from {2}\t\nERROR MESSAGE: {3}", DateTime.Now,
-                    pMessage.Text, Server.FindClient(pClient.ClientId), lvException.Message));
+                    pMessage.Text, this.Server.FindClient(pClient.ClientId), lvException.Message));
                 //throw new Exception("Error processing message:\n" + pMessage.Text + "\n\n" + lvException.Message);
             }
         }
@@ -94,18 +95,18 @@ namespace InputHive.Classes
         /// </summary>
         public void TurnServerOn(int pPort, string pIp, int pMaxclients, bool pAllowConnections)
         {
-            Server.ServerPort = pPort;
-            Server.IpAdres = pIp;
-            Server.MaximumClients = pMaxclients;
-            Server.AllowConnections = pAllowConnections;
-            Server.TurnServerOn();
+            this.Server.ServerPort = pPort;
+            this.Server.IpAdres = pIp;
+            this.Server.MaximumClients = pMaxclients;
+            this.Server.AllowConnections = pAllowConnections;
+            this.Server.TurnServerOn();
         }
         /// <summary>
         /// Turn server off
         /// </summary>
         public void TurnServerOff()
         {
-            Server.TurnServerOff();
+            this.Server.TurnServerOff();
         }
 
 
@@ -116,15 +117,15 @@ namespace InputHive.Classes
         /// <param name="pClient"></param>
         public void SendKey(string pKey, HiveCommunicationServerClient pClient)
         {
-            if (IsClientAllowedToSendKey(pKey, pClient))
+            if (this.IsClientAllowedToSendKey(pKey, pClient))
             {
                 InputHiveServerForm.LoggingQueue.Enqueue(String.Format("{0} Send key {1} from {2}",
                     DateTime.Now, pKey, pClient));
                 
                 // setting active might clear selected element?
                 string lvTitle = NativeWin32.GetActiveProcessWindow().Title;
-                if (lvTitle != Window.Title)
-                    NativeWin32.SetForegroundWindow(Window.HWnd.ToInt32());
+                if (lvTitle != this.Window.Title)
+                    NativeWin32.SetForegroundWindow(this.Window.HWnd.ToInt32());
 
                 //IntPtr child = NativeWin32.FindWindowEx(Window.hWnd, new IntPtr(0), "Edit", null);
                 SendKeys.SendWait(pKey);
@@ -134,7 +135,7 @@ namespace InputHive.Classes
 
         public bool IsClientAllowedToSendKey(string pKey, HiveCommunicationServerClient pClient)
         {
-            if (AllowInput == true)
+            if (this.AllowInput == true)
             {
                 if (pClient.AllowInput == true)
                 {
@@ -143,7 +144,7 @@ namespace InputHive.Classes
                     {
                         if (pClient.MinimumTimeCountdown == 0)
                         {
-                            if (Window.Title != "nowindowselectedinputhive" && !String.IsNullOrEmpty(Window.Title))
+                            if (this.Window.Title != "nowindowselectedinputhive" && !String.IsNullOrEmpty(this.Window.Title))
                             {
                                 return true;
                             }
@@ -186,8 +187,8 @@ namespace InputHive.Classes
 
         public void AddAllowedKey(string pKey)
         {
-            if (!DefaultAllowedKeys.Contains(pKey))
-                DefaultAllowedKeys.Add(pKey);
+            if (!this.DefaultAllowedKeys.Contains(pKey))
+                this.DefaultAllowedKeys.Add(pKey);
         }
 
 

@@ -21,28 +21,28 @@ namespace InputHive
 
         private void InputHiveServerForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            _hiveServerSystem.TurnServerOff();
+            this._hiveServerSystem.TurnServerOff();
         }
         public InputHiveServerForm()
         {
-            InitializeComponent();
+            this.InitializeComponent();
             this.Text = "Input Hive Server " + _VERSION;
             Timer lvThreadTimer = new Timer { Interval = 500 };
-            lvThreadTimer.Tick += ThreadTimerOnTick;
+            lvThreadTimer.Tick += this.ThreadTimerOnTick;
             lvThreadTimer.Start();
-            FillAllowedKeys();
-            _hiveServerSystem = new InputHiveServerSystem(chbxLogAll.Checked,
-                !chbxStopAllInput.Checked,(int)numSetupDefaultMinimumTime.Value, chbxSetupDefaultKeysAllowInput.Checked );
-            _hiveServerSystem.UpdateClientEvent += HiveServerSystemOnUpdateClientEvent;
+            this.FillAllowedKeys();
+            this._hiveServerSystem = new InputHiveServerSystem(this.chbxLogAll.Checked,
+                !this.chbxStopAllInput.Checked,(int)this.numSetupDefaultMinimumTime.Value, this.chbxSetupDefaultKeysAllowInput.Checked );
+            this._hiveServerSystem.UpdateClientEvent += this.HiveServerSystemOnUpdateClientEvent;
         }
 
         private void HiveServerSystemOnUpdateClientEvent()
         {
-            lbxClients.Invoke((MethodInvoker)(() =>
+            this.lbxClients.Invoke((MethodInvoker)(() =>
             {
-                lbxClients.Items.Clear();
-                foreach (HiveCommunicationServerClient lvClient in _hiveServerSystem.Server.Clients)
-                    lbxClients.Items.Add(lvClient.ToString());
+                this.lbxClients.Items.Clear();
+                foreach (HiveCommunicationServerClient lvClient in this._hiveServerSystem.Server.Clients)
+                    this.lbxClients.Items.Add(lvClient.ToString());
             }));
         }
 
@@ -51,15 +51,15 @@ namespace InputHive
         {
             while (LoggingQueue.Count > 0)
             {
-                rtbxLog.AppendText(LoggingQueue.Dequeue() + "\n");
-                rtbxLog.SelectionStart = rtbxLog.Text.Length;
-                rtbxLog.ScrollToCaret();
+                this.rtbxLog.AppendText(LoggingQueue.Dequeue() + "\n");
+                this.rtbxLog.SelectionStart = this.rtbxLog.Text.Length;
+                this.rtbxLog.ScrollToCaret();
             }
             while (ChatQueue.Count > 0)
             {
-                rtbxChat.AppendText(ChatQueue.Dequeue() + "\n");
-                rtbxChat.SelectionStart = rtbxChat.Text.Length;
-                rtbxChat.ScrollToCaret();
+                this.rtbxChat.AppendText(ChatQueue.Dequeue() + "\n");
+                this.rtbxChat.SelectionStart = this.rtbxChat.Text.Length;
+                this.rtbxChat.ScrollToCaret();
             }
         }
 
@@ -67,8 +67,8 @@ namespace InputHive
         {
             foreach (Keys lvK in Enum.GetValues(typeof(Keys)))
             {
-                cbxAllowedKeys.Items.Add(lvK);
-                cbxSetupDefaultKeys.Items.Add(lvK);
+                this.cbxAllowedKeys.Items.Add(lvK);
+                this.cbxSetupDefaultKeys.Items.Add(lvK);
             }
         }
 
@@ -80,9 +80,8 @@ namespace InputHive
         {
             try
             {
-                _hiveServerSystem.TurnServerOn((int)numPort.Value, tbxIpAddress.Text, (int)numMaxClients.Value,
-                    chbxAllowConnections.Checked);
-                UpdateUiServerOn();
+                this._hiveServerSystem.TurnServerOn((int)this.numPort.Value, this.tbxIpAddress.Text, (int)this.numMaxClients.Value, this.chbxAllowConnections.Checked);
+                this.UpdateUiServerOn();
             }
             catch (Exception lvException)
             {
@@ -95,8 +94,8 @@ namespace InputHive
         {
             try
             {
-                _hiveServerSystem.TurnServerOff();
-                UpdateUiServerOff();
+                this._hiveServerSystem.TurnServerOff();
+                this.UpdateUiServerOff();
             }
             catch (Exception lvException)
             {
@@ -107,60 +106,60 @@ namespace InputHive
 
         private void numMaxClients_ValueChanged(object sender, EventArgs e)
         {
-            _hiveServerSystem.Server.MaximumClients = (int)numMaxClients.Value;
+            this._hiveServerSystem.Server.MaximumClients = (int)this.numMaxClients.Value;
         }
         private void chbxAllowConnections_CheckedChanged(object sender, EventArgs e)
         {
-            _hiveServerSystem.Server.AllowConnections = chbxAllowConnections.Checked;
+            this._hiveServerSystem.Server.AllowConnections = this.chbxAllowConnections.Checked;
         }
 
         private void btnSetupDefaultKeysAdd_Click(object sender, EventArgs e)
         {
-            AddKeyToDefaultList(cbxSetupDefaultKeys.Text);
+            this.AddKeyToDefaultList(this.cbxSetupDefaultKeys.Text);
         }
         private void btnSetupDefaultKeysAddAll_Click(object sender, EventArgs e)
         {
-            foreach (var lvKey in cbxSetupDefaultKeys.Items)
-                AddKeyToDefaultList(lvKey.ToString());
+            foreach (var lvKey in this.cbxSetupDefaultKeys.Items)
+                this.AddKeyToDefaultList(lvKey.ToString());
         }
         private void btnSetupAllowedKeysRemoveAll_Click(object sender, EventArgs e)
         {
-            lbxSetupDefaultKeys.Items.Clear();
-            _hiveServerSystem.DefaultAllowedKeys.Clear();
+            this.lbxSetupDefaultKeys.Items.Clear();
+            this._hiveServerSystem.DefaultAllowedKeys.Clear();
         }
         private void btnSetupAllowedKeysRemove_Click(object sender, EventArgs e)
         {
             List<string> lvList = new List<string>();
-            if (lbxSetupDefaultKeys.SelectedItems.Count > 0)
-                foreach (string lvKey in lbxSetupDefaultKeys.SelectedItems)
+            if (this.lbxSetupDefaultKeys.SelectedItems.Count > 0)
+                foreach (string lvKey in this.lbxSetupDefaultKeys.SelectedItems)
                     lvList.Add(lvKey);
             foreach (string lvKey in lvList)
             {
-                lbxSetupDefaultKeys.Items.Remove(lvKey);
-                _hiveServerSystem.DefaultAllowedKeys.Remove(lvKey);
+                this.lbxSetupDefaultKeys.Items.Remove(lvKey);
+                this._hiveServerSystem.DefaultAllowedKeys.Remove(lvKey);
             }
         }
         
         private void chbxLogAll_CheckedChanged(object sender, EventArgs e)
         {
-            _hiveServerSystem.LogAll = chbxLogAll.Checked;
+            this._hiveServerSystem.LogAll = this.chbxLogAll.Checked;
         }
         private void numSetupDefaultMinimumTime_ValueChanged(object sender, EventArgs e)
         {
-            _hiveServerSystem.Server.DefaultMinimumTime = (int) numSetupDefaultMinimumTime.Value;
+            this._hiveServerSystem.Server.DefaultMinimumTime = (int)this.numSetupDefaultMinimumTime.Value;
         }
         private void chbxSetupDefaultKeysAllowInput_CheckedChanged(object sender, EventArgs e)
         {
-            _hiveServerSystem.Server.DefaultAllowInput = chbxSetupDefaultKeysAllowInput.Checked;
+            this._hiveServerSystem.Server.DefaultAllowInput = this.chbxSetupDefaultKeysAllowInput.Checked;
         }
         #endregion
 
         private void AddKeyToDefaultList(string pKey)
         {
-            if (!String.IsNullOrEmpty(pKey) && !lbxSetupDefaultKeys.Items.Contains(pKey))
+            if (!String.IsNullOrEmpty(pKey) && !this.lbxSetupDefaultKeys.Items.Contains(pKey))
             {
-                lbxSetupDefaultKeys.Items.Add(pKey);
-                _hiveServerSystem.AddAllowedKey(pKey);
+                this.lbxSetupDefaultKeys.Items.Add(pKey);
+                this._hiveServerSystem.AddAllowedKey(pKey);
             }
         }
 
@@ -172,22 +171,22 @@ namespace InputHive
 
         private void btnAllowedKeysAdd_Click(object sender, EventArgs e)
         {
-            AddKeyToClientList(cbxAllowedKeys.Text);
+            this.AddKeyToClientList(this.cbxAllowedKeys.Text);
         }
         private void btnAddAll_Click(object sender, EventArgs e)
         {
-            foreach (var lvKey in cbxAllowedKeys.Items)
-                AddKeyToClientList(lvKey.ToString());
+            foreach (var lvKey in this.cbxAllowedKeys.Items)
+                this.AddKeyToClientList(lvKey.ToString());
         }
 
         private void btnUpdateKeyList_Click(object sender, EventArgs e)
         {
             try
             {
-                string[] lvKeys = new string[lbxAllowedKeys.Items.Count];
+                string[] lvKeys = new string[this.lbxAllowedKeys.Items.Count];
                 for (int lvIndex = 0; lvIndex < lvKeys.Length; lvIndex++)
-                    lvKeys[lvIndex] = lbxAllowedKeys.Items[lvIndex].ToString();
-                _hiveServerSystem.UpdateKeyListToClient(_selectedClient, lvKeys);
+                    lvKeys[lvIndex] = this.lbxAllowedKeys.Items[lvIndex].ToString();
+                this._hiveServerSystem.UpdateKeyListToClient(this._selectedClient, lvKeys);
             }
             catch (Exception lvException)
             {
@@ -199,19 +198,19 @@ namespace InputHive
         private void btnAllowedKeysRemove_Click(object sender, EventArgs e)
         {
             List<string> lvList = new List<string>();
-            if (lbxAllowedKeys.SelectedItems.Count > 0)
-                foreach (string lvKey in lbxAllowedKeys.SelectedItems)
+            if (this.lbxAllowedKeys.SelectedItems.Count > 0)
+                foreach (string lvKey in this.lbxAllowedKeys.SelectedItems)
                     lvList.Add(lvKey);
             foreach (string lvKey in lvList)
             {
-                lbxAllowedKeys.Items.Remove(lvKey);
-                _selectedClient.AllowedKeys.Remove(lvKey);
+                this.lbxAllowedKeys.Items.Remove(lvKey);
+                this._selectedClient.AllowedKeys.Remove(lvKey);
             }
         }
         private void btnAllowedKeysRemoveAll_Click(object sender, EventArgs e)
         {
-            lbxAllowedKeys.Items.Clear();
-            _selectedClient.AllowedKeys.Clear();
+            this.lbxAllowedKeys.Items.Clear();
+            this._selectedClient.AllowedKeys.Clear();
         }
 
 
@@ -223,74 +222,74 @@ namespace InputHive
                     "Select your desired window", MessageBoxButtons.OKCancel, MessageBoxIcon.Information))
             {
                 Thread.Sleep(3000);
-                _hiveServerSystem.Window = NativeWin32.GetActiveProcessWindow();
-                lblCurrentWindow.Text = _hiveServerSystem.Window.Title;
+                this._hiveServerSystem.Window = NativeWin32.GetActiveProcessWindow();
+                this.lblCurrentWindow.Text = this._hiveServerSystem.Window.Title;
                 if (DialogResult.Yes !=
-                    MessageBox.Show("Is " + _hiveServerSystem.Window.Title + " the window you want?",
+                    MessageBox.Show("Is " + this._hiveServerSystem.Window.Title + " the window you want?",
                         "Are you sure?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question))
                 {
-                    _hiveServerSystem.Window = new NativeWin32.ProcessWindow(new IntPtr(), "nowindowselectedinputhive");
-                    lblCurrentWindow.ForeColor = Color.DarkRed;
-                    lblCurrentWindow.Text = "None";
+                    this._hiveServerSystem.Window = new NativeWin32.ProcessWindow(new IntPtr(), "nowindowselectedinputhive");
+                    this.lblCurrentWindow.ForeColor = Color.DarkRed;
+                    this.lblCurrentWindow.Text = "None";
                 }
                 else
                 {
-                    lblCurrentWindow.ForeColor = Color.Green;
-                    lblCurrentWindow.Text = _hiveServerSystem.Window.Title;
+                    this.lblCurrentWindow.ForeColor = Color.Green;
+                    this.lblCurrentWindow.Text = this._hiveServerSystem.Window.Title;
                 }
             }
         }
         private void btnClearWindow_Click(object sender, EventArgs e)
         {
-            _hiveServerSystem.Window = new NativeWin32.ProcessWindow(new IntPtr(), "nowindowselectedinputhive");
-            lblCurrentWindow.ForeColor = Color.DarkRed;
-            lblCurrentWindow.Text = "None";
+            this._hiveServerSystem.Window = new NativeWin32.ProcessWindow(new IntPtr(), "nowindowselectedinputhive");
+            this.lblCurrentWindow.ForeColor = Color.DarkRed;
+            this.lblCurrentWindow.Text = "None";
         }
 
         private void chbxStopAllInput_CheckedChanged(object sender, EventArgs e)
         {
-            _hiveServerSystem.AllowInput = !chbxStopAllInput.Checked;
+            this._hiveServerSystem.AllowInput = !this.chbxStopAllInput.Checked;
         }
 
         private void chbxAllowInput_CheckedChanged(object sender, EventArgs e)
         {
-            _selectedClient.AllowInput = chbxAllowInput.Checked;
+            this._selectedClient.AllowInput = this.chbxAllowInput.Checked;
         }
 
         private void btnKick_Click(object sender, EventArgs e)
         {
             if (DialogResult.Yes == MessageBox.Show("Are you sure you want to kick this client?\n"
-                + _selectedClient, "Are you sure?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question))
-                _hiveServerSystem.Server.KickClient(_selectedClient);
+                + this._selectedClient, "Are you sure?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question))
+                this._hiveServerSystem.Server.KickClient(this._selectedClient);
         }
 
         private void btnBan_Click(object sender, EventArgs e)
         {
             if (DialogResult.Yes == MessageBox.Show("Are you sure you want to ban this client?\n"
-                + _selectedClient, "Are you sure?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question))
+                + this._selectedClient, "Are you sure?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question))
                 if (DialogResult.Yes == MessageBox.Show("There is no unbanning feature at the moment.\nAre you very sure?",
                     "Are you very sure?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning))
-                    _hiveServerSystem.Server.BanClient(_selectedClient);
+                    this._hiveServerSystem.Server.BanClient(this._selectedClient);
         }
 
         private void lbxClients_SelectedIndexChanged(object sender, EventArgs e)
         {
-            lbxAllowedKeys.Items.Clear();
-            if (lbxClients.SelectedItem != null)
+            this.lbxAllowedKeys.Items.Clear();
+            if (this.lbxClients.SelectedItem != null)
             {
-                _selectedClient = _hiveServerSystem.Server.FindClientByString(lbxClients.SelectedItem.ToString());
-                UpdateUiSelectedClient();
+                this._selectedClient = this._hiveServerSystem.Server.FindClientByString(this.lbxClients.SelectedItem.ToString());
+                this.UpdateUiSelectedClient();
             }
             else
             {
-                _selectedClient = null;
-                gbxViewClient.Enabled = false;
+                this._selectedClient = null;
+                this.gbxViewClient.Enabled = false;
             }
         }
 
         private void numClientMinimumTime_ValueChanged(object sender, EventArgs e)
         {
-            _selectedClient.MinimumTime = (int) numClientMinimumTime.Value;
+            this._selectedClient.MinimumTime = (int)this.numClientMinimumTime.Value;
         }
 
         #endregion
@@ -298,10 +297,10 @@ namespace InputHive
 
         private void AddKeyToClientList(string pKey)
         {
-            if (!String.IsNullOrEmpty(pKey) && !lbxAllowedKeys.Items.Contains(pKey))
+            if (!String.IsNullOrEmpty(pKey) && !this.lbxAllowedKeys.Items.Contains(pKey))
             {
-                lbxAllowedKeys.Items.Add(pKey);
-                _selectedClient.AddAllowedKey(pKey);
+                this.lbxAllowedKeys.Items.Add(pKey);
+                this._selectedClient.AddAllowedKey(pKey);
             }
         }
 
@@ -317,50 +316,49 @@ namespace InputHive
 
         private void btnClearLog_Click(object sender, EventArgs e)
         {
-            rtbxLog.Clear();
+            this.rtbxLog.Clear();
         }
         private void btnClearChat_Click(object sender, EventArgs e)
         {
-            rtbxChat.Clear();
+            this.rtbxChat.Clear();
         }
 
         #endregion
 
         private void UpdateUiServerOn()
         {
-            lblServerStatus.ForeColor = Color.Green;
-            lblServerStatus.Text = string.Format("Online on: IP:{0} | Port: {1}", _hiveServerSystem.Server.IpAdres,
-                _hiveServerSystem.Server.ServerPort);
-            btnTurnServerOn.Enabled = false;
-            btnTurnServerOff.Enabled = true;
-            numPort.ReadOnly = true;
-            tbxIpAddress.ReadOnly = true;
-            tbxIpAddress.Text = _hiveServerSystem.Server.IpAdres;
+            this.lblServerStatus.ForeColor = Color.Green;
+            this.lblServerStatus.Text = string.Format("Online on: IP:{0} | Port: {1}", this._hiveServerSystem.Server.IpAdres, this._hiveServerSystem.Server.ServerPort);
+            this.btnTurnServerOn.Enabled = false;
+            this.btnTurnServerOff.Enabled = true;
+            this.numPort.ReadOnly = true;
+            this.tbxIpAddress.ReadOnly = true;
+            this.tbxIpAddress.Text = this._hiveServerSystem.Server.IpAdres;
         }
         private void UpdateUiServerOff()
         {
-            lblServerStatus.ForeColor = Color.DarkRed;
-            lblServerStatus.Text = "Offline";
-            btnTurnServerOn.Enabled = true;
-            btnTurnServerOff.Enabled = false;
-            numPort.ReadOnly = false;
-            tbxIpAddress.ReadOnly = false;
+            this.lblServerStatus.ForeColor = Color.DarkRed;
+            this.lblServerStatus.Text = "Offline";
+            this.btnTurnServerOn.Enabled = true;
+            this.btnTurnServerOff.Enabled = false;
+            this.numPort.ReadOnly = false;
+            this.tbxIpAddress.ReadOnly = false;
         }
 
         private void UpdateUiSelectedClient()
         {
-            gbxViewClient.Invoke((MethodInvoker)(() =>
-            { gbxViewClient.Enabled = true; }));
-            chbxAllowInput.Invoke((MethodInvoker)(() =>
-            { chbxAllowInput.Checked = _selectedClient.AllowInput; }));
-            lbxAllowedKeys.Invoke((MethodInvoker)(() =>
+            this.gbxViewClient.Invoke((MethodInvoker)(() =>
+            { this.gbxViewClient.Enabled = true; }));
+            this.chbxAllowInput.Invoke((MethodInvoker)(() =>
+            { this.chbxAllowInput.Checked = this._selectedClient.AllowInput; }));
+            this.lbxAllowedKeys.Invoke((MethodInvoker)(() =>
             {
-                foreach (string lvKey in _selectedClient.AllowedKeys)
-                    lbxAllowedKeys.Items.Add(lvKey);
+                foreach (string lvKey in this._selectedClient.AllowedKeys)
+                    this.lbxAllowedKeys.Items.Add(lvKey);
             }));
-            numClientMinimumTime.Invoke((MethodInvoker) (() =>
+            this.numClientMinimumTime.Invoke((MethodInvoker) (() =>
             {
-                numClientMinimumTime.Value = _selectedClient.MinimumTime;
+                this.numClientMinimumTime.Value = this._selectedClient.MinimumTime;
             }));
 
         }

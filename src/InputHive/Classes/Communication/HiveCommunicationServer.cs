@@ -37,46 +37,46 @@ namespace InputHive.Classes.Communication
 
         public HiveCommunicationServer(int pDefaultMinimumTime, bool pDefaultAllowInput)
         {
-            DefaultMinimumTime = pDefaultMinimumTime;
-            DefaultAllowInput = pDefaultAllowInput;
-            Clients = new List<HiveCommunicationServerClient>();
-            BannedIps = new List<string>();
+            this.DefaultMinimumTime = pDefaultMinimumTime;
+            this.DefaultAllowInput = pDefaultAllowInput;
+            this.Clients = new List<HiveCommunicationServerClient>();
+            this.BannedIps = new List<string>();
         }
 
 
         public void TurnServerOn()
         {
-            if (String.IsNullOrEmpty(IpAdres))
+            if (String.IsNullOrEmpty(this.IpAdres))
             {
                 IPHostEntry lvHost = Dns.GetHostEntry(Dns.GetHostName());
                 foreach (IPAddress lvIp in lvHost.AddressList)
                 {
                     if (lvIp.AddressFamily == AddressFamily.InterNetwork)
                     {
-                        IpAdres = lvIp.ToString();
+                        this.IpAdres = lvIp.ToString();
                         break;
                     }
                 }
             }
-            Server = ScsServerFactory.CreateServer(new ScsTcpEndPoint(IpAdres, ServerPort));
+            this.Server = ScsServerFactory.CreateServer(new ScsTcpEndPoint(this.IpAdres, this.ServerPort));
 
             //Creeër eventhandlers
-            Server.ClientConnected += Server_ClientConnected;
-            Server.ClientDisconnected += Server_ClientDisconnected;
+            this.Server.ClientConnected += this.Server_ClientConnected;
+            this.Server.ClientDisconnected += this.Server_ClientDisconnected;
 
             // start de server
-            Server.Start();
-            ServerStarted = true;
+            this.Server.Start();
+            this.ServerStarted = true;
             InputHiveServerForm.LoggingQueue.Enqueue(String.Format(
-                "{0} Started server succesfully on:\t{1} : {2}",DateTime.Now, IpAdres, ServerPort));
+                "{0} Started server succesfully on:\t{1} : {2}",DateTime.Now, this.IpAdres, this.ServerPort));
         }
         public void TurnServerOff()
         {
-            foreach (HiveCommunicationServerClient lvC in Clients)
+            foreach (HiveCommunicationServerClient lvC in this.Clients)
                 lvC.ClientInformation.SendMessage(new ScsTextMessage("kick"));
-            Clients.Clear();
-            if (ServerStarted == true)
-                Server.Stop();
+            this.Clients.Clear();
+            if (this.ServerStarted == true)
+                this.Server.Stop();
         }
 
         private void Server_ClientConnected(object sender, ServerClientEventArgs e)
@@ -86,7 +86,7 @@ namespace InputHive.Classes.Communication
                 InputHiveServerForm.LoggingQueue.Enqueue(String.Format(
                     "{0} A new client tried to connect. ClientID = {1} {2}",
                     DateTime.Now, e.Client.ClientId, e.Client.RemoteEndPoint));
-                if (Clients.Count >= MaximumClients && MaximumClients != 0)
+                if (this.Clients.Count >= this.MaximumClients && this.MaximumClients != 0)
                 {
                     InputHiveServerForm.LoggingQueue.Enqueue(String.Format(
                         "{0} Server is full. DISCONNECTED WITH ClientID: {1}", DateTime.Now, e.Client.ClientId));
@@ -95,16 +95,16 @@ namespace InputHive.Classes.Communication
                 }
                 else
                 {
-                    if (BannedIps.Contains(e.Client.RemoteEndPoint.ToString()))
+                    if (this.BannedIps.Contains(e.Client.RemoteEndPoint.ToString()))
                     {
                         e.Client.SendMessage(new ScsTextMessage("ban"));
                         e.Client.Disconnect();
                     }
-                    else if (AllowConnections == true)
+                    else if (this.AllowConnections == true)
                     {
-                        Clients.Add(new HiveCommunicationServerClient(e.Client,DefaultMinimumTime,DefaultAllowInput ));
+                        this.Clients.Add(new HiveCommunicationServerClient(e.Client, this.DefaultMinimumTime, this.DefaultAllowInput ));
                         // eventhandler
-                        e.Client.MessageReceived += Client_MessageReceived;
+                        e.Client.MessageReceived += this.Client_MessageReceived;
                     }
                     else
                     {
@@ -126,20 +126,20 @@ namespace InputHive.Classes.Communication
         {
             try
             {
-                HiveCommunicationServerClient lvClient = FindClient(e.Client.ClientId);
+                HiveCommunicationServerClient lvClient = this.FindClient(e.Client.ClientId);
                 if (lvClient != null)
                 {
                     InputHiveServerForm.LoggingQueue.Enqueue(String.Format(
                         "{0} {1} disconnected. ID: {2} IP: {3}", DateTime.Now,lvClient.Username, 
                         lvClient.ClientInformation.ClientId, lvClient.ClientInformation.RemoteEndPoint));
-                    ChatToAllClients(String.Format("{0} disconnected.", lvClient.Username));
-                    foreach (HiveCommunicationServerClient lvC in Clients)
+                    this.ChatToAllClients(String.Format("{0} disconnected.", lvClient.Username));
+                    foreach (HiveCommunicationServerClient lvC in this.Clients)
                         if (lvC.ClientInformation.ClientId == e.Client.ClientId)
                         {
-                            Clients.Remove(lvC);
+                            this.Clients.Remove(lvC);
                             break;
                         }
-                    if (UpdateClientEvent != null) UpdateClientEvent.Invoke();
+                    if (this.UpdateClientEvent != null) this.UpdateClientEvent.Invoke();
                 }
             }
             catch (Exception lvEx)
@@ -154,7 +154,7 @@ namespace InputHive.Classes.Communication
                 if (lvMessage != null)
                 {
                     IScsServerClient lvClient = (IScsServerClient)sender;
-                    if (NewMessage != null) NewMessage.Invoke(lvMessage, lvClient);
+                    if (this.NewMessage != null) this.NewMessage.Invoke(lvMessage, lvClient);
                 }
             }
             catch (Exception lvEx)
@@ -167,11 +167,11 @@ namespace InputHive.Classes.Communication
         public void ChatToAllClients(string pText)
         {
             InputHiveServerForm.ChatQueue.Enqueue(pText);
-            MessageToAllClients(string.Format("chat:{0}", pText));
+            this.MessageToAllClients(string.Format("chat:{0}", pText));
         }
         public void MessageToAllClients(string pText)
         {
-            foreach (HiveCommunicationServerClient lvClient in Clients)
+            foreach (HiveCommunicationServerClient lvClient in this.Clients)
                 if (lvClient != null && lvClient.ClientInformation.CommunicationState == CommunicationStates.Connected
                     && !String.IsNullOrEmpty(lvClient.Username))
                 {
@@ -186,30 +186,30 @@ namespace InputHive.Classes.Communication
                             "{0} Kicked client: {1}", DateTime.Now, pClient));
             pClient.ClientInformation.SendMessage(new ScsTextMessage("kick"));
             pClient.ClientInformation.Disconnect();
-            if (UpdateClientEvent != null) UpdateClientEvent.Invoke();
+            if (this.UpdateClientEvent != null) this.UpdateClientEvent.Invoke();
         }
 
         public void BanClient(HiveCommunicationServerClient pClient)
         {
-            BannedIps.Add(pClient.ClientInformation.RemoteEndPoint.ToString());
+            this.BannedIps.Add(pClient.ClientInformation.RemoteEndPoint.ToString());
             InputHiveServerForm.LoggingQueue.Enqueue(String.Format(
                             "{0} Banned client: {1}", DateTime.Now, pClient));
             pClient.ClientInformation.SendMessage(new ScsTextMessage("ban"));
             pClient.ClientInformation.Disconnect();
-            if (UpdateClientEvent != null) UpdateClientEvent.Invoke();
+            if (this.UpdateClientEvent != null) this.UpdateClientEvent.Invoke();
         }
 
         public HiveCommunicationServerClient FindClient(string pUsername)
         {
-            return Clients.Find(pC => String.Equals(pC.Username, pUsername, StringComparison.CurrentCultureIgnoreCase));
+            return this.Clients.Find(pC => String.Equals(pC.Username, pUsername, StringComparison.CurrentCultureIgnoreCase));
         }
         public HiveCommunicationServerClient FindClientByString(string pToString)
         {
-            return Clients.Find(pC => pC.ToString() == pToString);
+            return this.Clients.Find(pC => pC.ToString() == pToString);
         }
         public HiveCommunicationServerClient FindClient(long pId)
         {
-            return Clients.Find(pC => pC.ClientInformation.ClientId == pId);
+            return this.Clients.Find(pC => pC.ClientInformation.ClientId == pId);
         }
     }
 }

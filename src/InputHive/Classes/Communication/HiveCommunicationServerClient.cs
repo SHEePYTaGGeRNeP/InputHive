@@ -30,46 +30,46 @@ namespace InputHive.Classes.Communication
 
         public HiveCommunicationServerClient(IScsServerClient pClientInformation, int pMinimumTime, bool pAllowInput)
         {
-            ClientInformation = pClientInformation;
-            MinimumTime = pMinimumTime;
-            AllowInput = pAllowInput;
-            AllowedKeys = new List<string>();
-            _countdownTimer = new Timer();
-            _countdownTimer.Tick += CountdownTimerOnTick;
+            this.ClientInformation = pClientInformation;
+            this.MinimumTime = pMinimumTime;
+            this.AllowInput = pAllowInput;
+            this.AllowedKeys = new List<string>();
+            this._countdownTimer = new Timer();
+            this._countdownTimer.Tick += this.CountdownTimerOnTick;
         }
 
         private void CountdownTimerOnTick(object pSender, EventArgs pEventArgs)
         {
-            MinimumTimeCountdown = 0;
+            this.MinimumTimeCountdown = 0;
         }
 
         public override string ToString()
         {
-            return Username + " " + ClientInformation.RemoteEndPoint;
+            return this.Username + " " + this.ClientInformation.RemoteEndPoint;
         }
 
         public void AddAllowedKey(string pKey)
         {
-            if (!AllowedKeys.Contains(pKey))
-                AllowedKeys.Add(pKey);
+            if (!this.AllowedKeys.Contains(pKey))
+                this.AllowedKeys.Add(pKey);
         }
 
         public void SendMessage(string pText)
         {
-            if (ClientInformation != null)
-                ClientInformation.SendMessage(new ScsTextMessage(pText));
+            if (this.ClientInformation != null)
+                this.ClientInformation.SendMessage(new ScsTextMessage(pText));
             else
                 throw new Exception("Clientinformation cannot be null");
         }
 
         public void ResetCountdown()
         {
-            if (MinimumTime > 0)
+            if (this.MinimumTime > 0)
             {
-                MinimumTimeCountdown = MinimumTime;
-                _countdownTimer.Stop();
-                _countdownTimer.Interval = MinimumTimeCountdown;
-                _countdownTimer.Start();
+                this.MinimumTimeCountdown = this.MinimumTime;
+                this._countdownTimer.Stop();
+                this._countdownTimer.Interval = this.MinimumTimeCountdown;
+                this._countdownTimer.Start();
             }
         }
     }

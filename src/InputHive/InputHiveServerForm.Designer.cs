@@ -77,6 +77,8 @@
             this.rtbxChat = new System.Windows.Forms.RichTextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.lblServerStatus = new System.Windows.Forms.Label();
+            this.chbxSetupScreenSharing = new System.Windows.Forms.CheckBox();
+            this.chbxViewScreenSharing = new System.Windows.Forms.CheckBox();
             this.gbxServer.SuspendLayout();
             this.gbxSetupAllowedKeys.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numSetupDefaultMinimumTime)).BeginInit();
@@ -139,6 +141,7 @@
             // 
             // gbxSetupAllowedKeys
             // 
+            this.gbxSetupAllowedKeys.Controls.Add(this.chbxSetupScreenSharing);
             this.gbxSetupAllowedKeys.Controls.Add(this.label3);
             this.gbxSetupAllowedKeys.Controls.Add(this.numSetupDefaultMinimumTime);
             this.gbxSetupAllowedKeys.Controls.Add(this.chbxSetupDefaultKeysAllowInput);
@@ -150,7 +153,7 @@
             this.gbxSetupAllowedKeys.Controls.Add(this.cbxSetupDefaultKeys);
             this.gbxSetupAllowedKeys.Location = new System.Drawing.Point(6, 19);
             this.gbxSetupAllowedKeys.Name = "gbxSetupAllowedKeys";
-            this.gbxSetupAllowedKeys.Size = new System.Drawing.Size(325, 217);
+            this.gbxSetupAllowedKeys.Size = new System.Drawing.Size(369, 217);
             this.gbxSetupAllowedKeys.TabIndex = 22;
             this.gbxSetupAllowedKeys.TabStop = false;
             this.gbxSetupAllowedKeys.Text = "Default settings for new clients";
@@ -192,7 +195,7 @@
             // 
             // btnSetupDefaultKeysAddAll
             // 
-            this.btnSetupDefaultKeysAddAll.Location = new System.Drawing.Point(240, 42);
+            this.btnSetupDefaultKeysAddAll.Location = new System.Drawing.Point(277, 41);
             this.btnSetupDefaultKeysAddAll.Name = "btnSetupDefaultKeysAddAll";
             this.btnSetupDefaultKeysAddAll.Size = new System.Drawing.Size(75, 23);
             this.btnSetupDefaultKeysAddAll.TabIndex = 29;
@@ -202,7 +205,7 @@
             // 
             // btnSetupAllowedKeysRemoveAll
             // 
-            this.btnSetupAllowedKeysRemoveAll.Location = new System.Drawing.Point(240, 150);
+            this.btnSetupAllowedKeysRemoveAll.Location = new System.Drawing.Point(277, 149);
             this.btnSetupAllowedKeysRemoveAll.Name = "btnSetupAllowedKeysRemoveAll";
             this.btnSetupAllowedKeysRemoveAll.Size = new System.Drawing.Size(75, 23);
             this.btnSetupAllowedKeysRemoveAll.TabIndex = 27;
@@ -212,7 +215,7 @@
             // 
             // btnSetupAllowedKeysRemove
             // 
-            this.btnSetupAllowedKeysRemove.Location = new System.Drawing.Point(240, 179);
+            this.btnSetupAllowedKeysRemove.Location = new System.Drawing.Point(277, 178);
             this.btnSetupAllowedKeysRemove.Name = "btnSetupAllowedKeysRemove";
             this.btnSetupAllowedKeysRemove.Size = new System.Drawing.Size(75, 23);
             this.btnSetupAllowedKeysRemove.TabIndex = 26;
@@ -222,7 +225,7 @@
             // 
             // btnSetupDefaultKeysAdd
             // 
-            this.btnSetupDefaultKeysAdd.Location = new System.Drawing.Point(240, 15);
+            this.btnSetupDefaultKeysAdd.Location = new System.Drawing.Point(277, 14);
             this.btnSetupDefaultKeysAdd.Name = "btnSetupDefaultKeysAdd";
             this.btnSetupDefaultKeysAdd.Size = new System.Drawing.Size(75, 23);
             this.btnSetupDefaultKeysAdd.TabIndex = 25;
@@ -233,7 +236,7 @@
             // lbxSetupDefaultKeys
             // 
             this.lbxSetupDefaultKeys.FormattingEnabled = true;
-            this.lbxSetupDefaultKeys.Location = new System.Drawing.Point(94, 42);
+            this.lbxSetupDefaultKeys.Location = new System.Drawing.Point(131, 41);
             this.lbxSetupDefaultKeys.Name = "lbxSetupDefaultKeys";
             this.lbxSetupDefaultKeys.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.lbxSetupDefaultKeys.Size = new System.Drawing.Size(140, 160);
@@ -243,7 +246,7 @@
             // 
             this.cbxSetupDefaultKeys.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxSetupDefaultKeys.FormattingEnabled = true;
-            this.cbxSetupDefaultKeys.Location = new System.Drawing.Point(94, 16);
+            this.cbxSetupDefaultKeys.Location = new System.Drawing.Point(131, 15);
             this.cbxSetupDefaultKeys.Name = "cbxSetupDefaultKeys";
             this.cbxSetupDefaultKeys.Size = new System.Drawing.Size(140, 21);
             this.cbxSetupDefaultKeys.TabIndex = 24;
@@ -413,6 +416,7 @@
             // 
             // gbxViewClient
             // 
+            this.gbxViewClient.Controls.Add(this.chbxViewScreenSharing);
             this.gbxViewClient.Controls.Add(this.label6);
             this.gbxViewClient.Controls.Add(this.numClientMinimumTime);
             this.gbxViewClient.Controls.Add(this.btnBan);
@@ -436,7 +440,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(14, 56);
+            this.label6.Location = new System.Drawing.Point(14, 71);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(74, 26);
             this.label6.TabIndex = 34;
@@ -444,7 +448,7 @@
             // 
             // numClientMinimumTime
             // 
-            this.numClientMinimumTime.Location = new System.Drawing.Point(17, 85);
+            this.numClientMinimumTime.Location = new System.Drawing.Point(17, 100);
             this.numClientMinimumTime.Maximum = new decimal(new int[] {
             -559939585,
             902409669,
@@ -652,6 +656,28 @@
             this.lblServerStatus.TabIndex = 7;
             this.lblServerStatus.Text = "Offline";
             // 
+            // chbxSetupScreenSharing
+            // 
+            this.chbxSetupScreenSharing.AutoSize = true;
+            this.chbxSetupScreenSharing.Checked = true;
+            this.chbxSetupScreenSharing.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chbxSetupScreenSharing.Location = new System.Drawing.Point(10, 41);
+            this.chbxSetupScreenSharing.Name = "chbxSetupScreenSharing";
+            this.chbxSetupScreenSharing.Size = new System.Drawing.Size(91, 17);
+            this.chbxSetupScreenSharing.TabIndex = 33;
+            this.chbxSetupScreenSharing.Text = "Share Screen";
+            this.chbxSetupScreenSharing.UseVisualStyleBackColor = true;
+            // 
+            // chbxViewScreenSharing
+            // 
+            this.chbxViewScreenSharing.AutoSize = true;
+            this.chbxViewScreenSharing.Location = new System.Drawing.Point(10, 50);
+            this.chbxViewScreenSharing.Name = "chbxViewScreenSharing";
+            this.chbxViewScreenSharing.Size = new System.Drawing.Size(91, 17);
+            this.chbxViewScreenSharing.TabIndex = 35;
+            this.chbxViewScreenSharing.Text = "Share Screen";
+            this.chbxViewScreenSharing.UseVisualStyleBackColor = false;
+            // 
             // InputHiveServerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -736,6 +762,8 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.NumericUpDown numClientMinimumTime;
         private System.Windows.Forms.Button btnClearWindow;
+        private System.Windows.Forms.CheckBox chbxSetupScreenSharing;
+        private System.Windows.Forms.CheckBox chbxViewScreenSharing;
     }
 }
 
