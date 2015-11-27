@@ -26,3 +26,4 @@ E:\DEV\GITHUB\InputHive\src\InputHive\obj\Debug\InputHiveServer.csproj.GenerateR
 E:\DEV\GITHUB\InputHive\src\InputHive\bin\Debug\InputHive.exe
 E:\DEV\GITHUB\InputHive\src\InputHive\bin\Debug\InputHive.pdb
 E:\DEV\GITHUB\InputHive\src\InputHive\bin\Debug\Scs.dll
+E:\GITHUB\InputHive\src\InputHive\bin\Debug\InputHive.exe.config
