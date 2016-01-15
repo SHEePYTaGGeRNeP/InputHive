@@ -80,13 +80,13 @@ namespace InputHiveClient
             try
             {
                 Cursor.Current = Cursors.WaitCursor;
-                if (String.IsNullOrEmpty(this.tbxServerIp.Text))
+                if (String.IsNullOrWhiteSpace(this.tbxServerIp.Text))
                 {
                     MessageBox.Show("IP Address cannot be empty", "Not all fields are filled in", MessageBoxButtons.OK,
                         MessageBoxIcon.Information);
                     return;
                 }
-                if (String.IsNullOrEmpty(this.tbxUsername.Text))
+                if (String.IsNullOrWhiteSpace(this.tbxUsername.Text))
                     MessageBox.Show("Username cannot be empty", "Not all fields are filled in", MessageBoxButtons.OK,
                         MessageBoxIcon.Information);
                 else if (this.tbxUsername.Text.ToLower() == "server")
@@ -124,7 +124,7 @@ namespace InputHiveClient
 
         private void btnSendMessage_Click(object sender, EventArgs e)
         {
-            if (!String.IsNullOrEmpty(this.tbxChatMessage.Text))
+            if (!String.IsNullOrWhiteSpace(this.tbxChatMessage.Text))
             {
                 this._hiveClientSystem.SendChatMessage(this.tbxChatMessage.Text);
                 this.tbxChatMessage.Clear();
@@ -179,7 +179,7 @@ namespace InputHiveClient
 
         private void AddKeyToList(string pKey)
         {
-            if (!String.IsNullOrEmpty(pKey) && !this.lbxSendingKeys.Items.Contains(pKey))
+            if (!String.IsNullOrWhiteSpace(pKey) && !this.lbxSendingKeys.Items.Contains(pKey))
                 this.lbxSendingKeys.Items.Add(pKey);
         }
 

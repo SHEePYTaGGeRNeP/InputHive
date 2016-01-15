@@ -77,7 +77,7 @@ namespace InputHive.Classes
                 {
                     case "username":
                         if (this.Server.FindClient(lvSplit[1]) == null && lvSplit[1].ToLower() != "server"
-                            && !String.IsNullOrEmpty(lvSplit[1]))
+                            && !String.IsNullOrWhiteSpace(lvSplit[1]))
                         {
                             this.Server.FindClient(pClient.ClientId).Username = lvSplit[1];
                             pClient.SendMessage(new ScsTextMessage("username:ok"));
@@ -165,12 +165,12 @@ namespace InputHive.Classes
                 if (pClient.AllowInput == true)
                 {
                     // Check if key is allowed in client.AllowedKeys list
-                    Keys foundKey = Keys.F24;
-                    if ((foundKey = pClient.AllowedKeys.Find(pK => pK == pKey)) != Keys.F24)
+                    Keys foundKey = Keys.None;
+                    if ((foundKey = pClient.AllowedKeys.Find(pK => pK == pKey)) != Keys.None)
                     {
                         if (pClient.MinimumTimeCountdown == 0)
                         {
-                            if (this.Window.Title != "nowindowselectedinputhive" && !String.IsNullOrEmpty(this.Window.Title))
+                            if (this.Window.Title != "nowindowselectedinputhive" && !String.IsNullOrWhiteSpace(this.Window.Title))
                             {
                                 return true;
                             }

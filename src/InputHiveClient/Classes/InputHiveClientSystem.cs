@@ -122,7 +122,7 @@ namespace InputHiveClient.Classes
         {
             this.Client.AllowedKeys.Clear();
             string[] lvSplit = pKeylist.Split(',');
-            foreach (string lvKey in lvSplit.Where(pKey => !String.IsNullOrEmpty(pKey)))
+            foreach (string lvKey in lvSplit.Where(pKey => !String.IsNullOrWhiteSpace(pKey)))
                 this.Client.AllowedKeys.Add((Keys)Enum.Parse(typeof(Keys), lvKey.Trim()));
             if (this.OnKeylistUpdate != null)
                 this.OnKeylistUpdate.Invoke();

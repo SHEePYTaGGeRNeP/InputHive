@@ -84,7 +84,7 @@
             {
                 this._hiveServerSystem.TurnServerOn((int)this.numPort.Value, this.tbxIpAddress.Text, (int)this.numMaxClients.Value, this.chbxAllowConnections.Checked);
                 this.UpdateUiServerOn();
-                this._hiveServerSystem.ScreenSharingTimer.Start();
+               // this._hiveServerSystem.ScreenSharingTimer.Start();
             }
             catch (Exception lvException)
             {
@@ -123,8 +123,7 @@
         }
         private void btnSetupDefaultKeysAddAll_Click(object sender, EventArgs e)
         {
-            foreach (string lvKey in this.cbxSetupDefaultKeys.Items)
-                if (!String.IsNullOrWhiteSpace(lvKey))
+            foreach (Keys lvKey in this.cbxSetupDefaultKeys.Items)
                     this.AddKeyToDefaultList((Keys)Enum.Parse(typeof(Keys),lvKey.ToString()));
         }
         private void btnSetupAllowedKeysRemoveAll_Click(object sender, EventArgs e)
@@ -328,7 +327,7 @@
         private void AddKeyToClientList(string pKey)
         {
             Keys key;
-            if (!String.IsNullOrEmpty(pKey) && !this.lbxAllowedKeys.Items.Contains(pKey))
+            if (!String.IsNullOrWhiteSpace(pKey) && !this.lbxAllowedKeys.Items.Contains(pKey))
             {
                 if (Enum.TryParse(pKey, out key))
                 {

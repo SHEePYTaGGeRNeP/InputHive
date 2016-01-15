@@ -53,7 +53,7 @@ namespace InputHive.Classes.Communication
 
         public void TurnServerOn()
         {
-            if (String.IsNullOrEmpty(this.IpAdres))
+            if (String.IsNullOrWhiteSpace(this.IpAdres))
             {
                 IPHostEntry lvHost = Dns.GetHostEntry(Dns.GetHostName());
                 foreach (IPAddress lvIp in lvHost.AddressList)
@@ -179,7 +179,7 @@ namespace InputHive.Classes.Communication
         {
             foreach (HiveCommunicationServerClient lvClient in this.Clients)
                 if (lvClient != null && lvClient.ClientInformation.CommunicationState == CommunicationStates.Connected
-                    && !String.IsNullOrEmpty(lvClient.Username))
+                    && !String.IsNullOrWhiteSpace(lvClient.Username))
                 {
                     lvClient.ClientInformation.SendMessage(new ScsTextMessage(pText));
                 }
@@ -189,7 +189,7 @@ namespace InputHive.Classes.Communication
             foreach (HiveCommunicationServerClient c in clients)
             {
                 if (c != null && c.ClientInformation.CommunicationState == CommunicationStates.Connected
-                    && !String.IsNullOrEmpty(c.Username))
+                    && !String.IsNullOrWhiteSpace(c.Username))
                     c.ClientInformation.SendMessage(new ScsTextMessage(message));
             }
 
