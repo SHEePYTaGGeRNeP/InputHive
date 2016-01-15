@@ -182,7 +182,7 @@
 
         private void AddKeyToDefaultList(Keys pKey)
         {
-            if (this.lbxSetupDefaultKeys.Items.Contains(pKey.ToString()))
+            if (!this.lbxSetupDefaultKeys.Items.Contains(pKey.ToString()))
             {
                 this.lbxSetupDefaultKeys.Items.Add(pKey);
                 this._hiveServerSystem.AddAllowedKey(pKey);
