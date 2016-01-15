@@ -119,12 +119,13 @@
 
         private void btnSetupDefaultKeysAdd_Click(object sender, EventArgs e)
         {
-            this.AddKeyToDefaultList(this.cbxSetupDefaultKeys.Text);
+            this.AddKeyToDefaultList((Keys)Enum.Parse(typeof(Keys),this.cbxSetupDefaultKeys.Text));
         }
         private void btnSetupDefaultKeysAddAll_Click(object sender, EventArgs e)
         {
-            foreach (var lvKey in this.cbxSetupDefaultKeys.Items)
-                this.AddKeyToDefaultList(lvKey.ToString());
+            foreach (string lvKey in this.cbxSetupDefaultKeys.Items)
+                if (!String.IsNullOrWhiteSpace(lvKey))
+                    this.AddKeyToDefaultList((Keys)Enum.Parse(typeof(Keys),lvKey.ToString()));
         }
         private void btnSetupAllowedKeysRemoveAll_Click(object sender, EventArgs e)
         {
@@ -133,11 +134,11 @@
         }
         private void btnSetupAllowedKeysRemove_Click(object sender, EventArgs e)
         {
-            List<string> lvList = new List<string>();
+            List<Keys> lvList = new List<Keys>();
             if (this.lbxSetupDefaultKeys.SelectedItems.Count > 0)
                 foreach (string lvKey in this.lbxSetupDefaultKeys.SelectedItems)
-                    lvList.Add(lvKey);
-            foreach (string lvKey in lvList)
+                    lvList.Add((Keys)Enum.Parse(typeof(Keys),lvKey));
+            foreach (Keys lvKey in lvList)
             {
                 this.lbxSetupDefaultKeys.Items.Remove(lvKey);
                 this._hiveServerSystem.DefaultAllowedKeys.Remove(lvKey);
@@ -180,9 +181,9 @@
 
         #endregion
 
-        private void AddKeyToDefaultList(string pKey)
+        private void AddKeyToDefaultList(Keys pKey)
         {
-            if (!String.IsNullOrEmpty(pKey) && !this.lbxSetupDefaultKeys.Items.Contains(pKey))
+            if (this.lbxSetupDefaultKeys.Items.Contains(pKey.ToString()))
             {
                 this.lbxSetupDefaultKeys.Items.Add(pKey);
                 this._hiveServerSystem.AddAllowedKey(pKey);
@@ -209,9 +210,9 @@
         {
             try
             {
-                string[] lvKeys = new string[this.lbxAllowedKeys.Items.Count];
+                Keys[] lvKeys = new Keys[this.lbxAllowedKeys.Items.Count];
                 for (int lvIndex = 0; lvIndex < lvKeys.Length; lvIndex++)
-                    lvKeys[lvIndex] = this.lbxAllowedKeys.Items[lvIndex].ToString();
+                    lvKeys[lvIndex] = (Keys)Enum.Parse(typeof(Keys),this.lbxAllowedKeys.Items[lvIndex].ToString());
                 this._hiveServerSystem.UpdateKeyListToClient(this._selectedClient, lvKeys);
             }
             catch (Exception lvException)
@@ -230,7 +231,7 @@
             foreach (string lvKey in lvList)
             {
                 this.lbxAllowedKeys.Items.Remove(lvKey);
-                this._selectedClient.AllowedKeys.Remove(lvKey);
+                this._selectedClient.AllowedKeys.Remove((Keys)Enum.Parse(typeof(Keys),lvKey));
             }
         }
         private void btnAllowedKeysRemoveAll_Click(object sender, EventArgs e)
@@ -326,10 +327,14 @@
 
         private void AddKeyToClientList(string pKey)
         {
+            Keys key;
             if (!String.IsNullOrEmpty(pKey) && !this.lbxAllowedKeys.Items.Contains(pKey))
             {
-                this.lbxAllowedKeys.Items.Add(pKey);
-                this._selectedClient.AddAllowedKey(pKey);
+                if (Enum.TryParse(pKey, out key))
+                {
+                    this.lbxAllowedKeys.Items.Add(pKey);
+                    this._selectedClient.AddAllowedKey(key);
+                }
             }
         }
 
@@ -384,7 +389,7 @@
             { this.chbxViewScreenSharing.Checked = this._selectedClient.ShareScreens; }));
             this.lbxAllowedKeys.Invoke((MethodInvoker)(() =>
             {
-                foreach (string lvKey in this._selectedClient.AllowedKeys)
+                foreach (Keys lvKey in this._selectedClient.AllowedKeys)
                     this.lbxAllowedKeys.Items.Add(lvKey);
             }));
             this.numClientMinimumTime.Invoke((MethodInvoker)(() =>

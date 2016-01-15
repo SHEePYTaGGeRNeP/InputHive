@@ -9,7 +9,6 @@ using Hik.Communication.Scs.Server;
 
 namespace InputHive.Classes.Communication
 {
-    using System.ComponentModel;
     using System.Drawing;
     using System.Drawing.Imaging;
     using System.IO;
@@ -158,12 +157,11 @@ namespace InputHive.Classes.Communication
         {
             try
             {
-                var lvMessage = e.Message as ScsTextMessage; //Server only accepts text messages
-                if (lvMessage != null)
-                {
-                    IScsServerClient lvClient = (IScsServerClient)sender;
-                    if (this.NewMessage != null) this.NewMessage.Invoke(lvMessage, lvClient);
-                }
+                ScsTextMessage lvMessage = e.Message as ScsTextMessage; //Server only accepts text messages
+                if (lvMessage == null) return;
+                IScsServerClient lvClient = (IScsServerClient)sender;
+                if (this.NewMessage != null)
+                    this.NewMessage.Invoke(lvMessage, lvClient);
             }
             catch (Exception lvEx)
             {

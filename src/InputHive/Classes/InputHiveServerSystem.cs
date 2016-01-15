@@ -33,7 +33,7 @@ namespace InputHive.Classes
         /// <summary>
         /// List of all allowed Keys.ToString()
         /// </summary>
-        public List<string> DefaultAllowedKeys { get; private set; }
+        public List<Keys> DefaultAllowedKeys { get; private set; }
 
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace InputHive.Classes
             this.Server = new HiveCommunicationServer(pDefaultMinimumTime, pDefaultAllowInput, pDefaultShareScreens);
             this.Server.NewMessage += this.ServerOnNewMessage;
             this.Server.UpdateClientEvent += delegate { if (this.UpdateClientEvent != null) this.UpdateClientEvent.Invoke(); };
-            this.DefaultAllowedKeys = new List<string>();
+            this.DefaultAllowedKeys = new List<Keys>();
         }
 
 
@@ -86,7 +86,7 @@ namespace InputHive.Classes
                                 DateTime.Now, lvSplit[1]));
                             if (this.UpdateClientEvent != null) this.UpdateClientEvent.Invoke();
                             this.UpdateKeyListToClient(this.Server.FindClient(pClient.ClientId), this.DefaultAllowedKeys.ToArray());
-                            this.Server.FindClient(pClient.ClientId).AllowedKeys = new List<string>(this.DefaultAllowedKeys);
+                            this.Server.FindClient(pClient.ClientId).AllowedKeys = new List<Keys>(this.DefaultAllowedKeys);
                         }
                         else
                             pClient.SendMessage(new ScsTextMessage("username:error"));
@@ -95,7 +95,7 @@ namespace InputHive.Classes
                         this.Server.ChatToAllClients(string.Format("{0} {1}: {2}", DateTime.Now, this.Server.FindClient(pClient.ClientId).Username, pMessage.Text.Remove(0, 5)));
                         break;
                     case "key":
-                        this.SendKey(lvSplit[1].Trim(), this.Server.FindClient(pClient.ClientId));
+                        this.SendKey((Keys)Convert.ToInt32(lvSplit[1].Trim()), this.Server.FindClient(pClient.ClientId));
                         break;
                     default: throw new Exception();
                 }
@@ -135,7 +135,7 @@ namespace InputHive.Classes
         /// </summary>
         /// <param name="pKey">Keys.ToString()</param>
         /// <param name="pClient"></param>
-        public void SendKey(string pKey, HiveCommunicationServerClient pClient)
+        public void SendKey(Keys pKey, HiveCommunicationServerClient pClient)
         {
             if (this.IsClientAllowedToSendKey(pKey, pClient))
             {
@@ -148,19 +148,25 @@ namespace InputHive.Classes
                     NativeWin32.SetForegroundWindow(this.Window.HWnd.ToInt32());
 
                 //IntPtr child = NativeWin32.FindWindowEx(Window.hWnd, new IntPtr(0), "Edit", null);
-                SendKeys.SendWait(pKey);
+                SendKeys.SendWait(this.ConvertKeyToString(pKey));
                 pClient.ResetCountdown();
             }
         }
 
-        public bool IsClientAllowedToSendKey(string pKey, HiveCommunicationServerClient pClient)
+        private string ConvertKeyToString(Keys k)
+        {
+            return k.ToString();
+        }
+
+        public bool IsClientAllowedToSendKey(Keys pKey, HiveCommunicationServerClient pClient)
         {
             if (this.AllowInput == true)
             {
                 if (pClient.AllowInput == true)
                 {
                     // Check if key is allowed in client.AllowedKeys list
-                    if (pClient.AllowedKeys.Find(pK => pK == pKey) != null)
+                    Keys foundKey = Keys.F24;
+                    if ((foundKey = pClient.AllowedKeys.Find(pK => pK == pKey)) != Keys.F24)
                     {
                         if (pClient.MinimumTimeCountdown == 0)
                         {
@@ -205,7 +211,7 @@ namespace InputHive.Classes
             return false;
         }
 
-        public void AddAllowedKey(string pKey)
+        public void AddAllowedKey(Keys pKey)
         {
             if (!this.DefaultAllowedKeys.Contains(pKey))
                 this.DefaultAllowedKeys.Add(pKey);
@@ -217,11 +223,11 @@ namespace InputHive.Classes
         /// </summary>
         /// <param name="pClient"></param>
         /// <param name="pKeys">List of Keys.ToString()</param>
-        public void UpdateKeyListToClient(HiveCommunicationServerClient pClient, string[] pKeys)
+        public void UpdateKeyListToClient(HiveCommunicationServerClient pClient, Keys[] pKeys)
         {
             pClient.AllowedKeys.Clear();
             StringBuilder lvKeyBuilder = new StringBuilder();
-            foreach (string lvKey in pKeys)
+            foreach (Keys lvKey in pKeys)
             {
                 pClient.AllowedKeys.Add(lvKey);
                 lvKeyBuilder.Append(lvKey + ",");

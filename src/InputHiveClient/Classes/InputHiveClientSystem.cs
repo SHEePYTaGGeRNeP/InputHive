@@ -90,17 +90,21 @@ namespace InputHiveClient.Classes
                     InputHiveClientForm.LoggingQueue.Enqueue(String.Format(
                         "{0} Received keylist update.", DateTime.Now));
                     break;
-                case "sendnotallowed": InputHiveClientForm.LoggingQueue.Enqueue(String.Format(
-                    "{0} failed to send key. Not allowed to send keys.", DateTime.Now));
+                case "sendnotallowed":
+                    InputHiveClientForm.LoggingQueue.Enqueue(String.Format(
+                        "{0} failed to send key. Not allowed to send keys.", DateTime.Now));
                     break;
-                case "sendnotallowedkey": InputHiveClientForm.LoggingQueue.Enqueue(String.Format(
-                    "{0} failed to send key. Not allowed to send this key.",DateTime.Now));
+                case "sendnotallowedkey":
+                    InputHiveClientForm.LoggingQueue.Enqueue(String.Format(
+                        "{0} failed to send key. Not allowed to send this key.", DateTime.Now));
                     break;
-                case "sendnotallowedcooldown": InputHiveClientForm.LoggingQueue.Enqueue(String.Format(
-                    "{0} failed to send key. Not allowed to send yet.", DateTime.Now));
+                case "sendnotallowedcooldown":
+                    InputHiveClientForm.LoggingQueue.Enqueue(String.Format(
+                        "{0} failed to send key. Not allowed to send yet.", DateTime.Now));
                     break;
-                case "nosend": InputHiveClientForm.LoggingQueue.Enqueue(String.Format(
-                    "{0} failed to send key. Server not allowing keys to be sent.", DateTime.Now));
+                case "nosend":
+                    InputHiveClientForm.LoggingQueue.Enqueue(String.Format(
+                        "{0} failed to send key. Server not allowing keys to be sent.", DateTime.Now));
                     break;
                 case "screenshot":
                     Image image = StaticHelper.Base64ToImage(lvSplit[1]);
@@ -119,24 +123,20 @@ namespace InputHiveClient.Classes
             this.Client.AllowedKeys.Clear();
             string[] lvSplit = pKeylist.Split(',');
             foreach (string lvKey in lvSplit.Where(pKey => !String.IsNullOrEmpty(pKey)))
-                this.Client.AllowedKeys.Add(lvKey.Trim());
-            if (this.OnKeylistUpdate != null) this.OnKeylistUpdate.Invoke();
+                this.Client.AllowedKeys.Add((Keys)Enum.Parse(typeof(Keys), lvKey.Trim()));
+            if (this.OnKeylistUpdate != null)
+                this.OnKeylistUpdate.Invoke();
         }
 
-        /// <summary>
-        /// Send key to server
-        /// </summary>
-        /// <param name="pKey"></param>
-        public void SendKey(string pKey)
+        public void SendKey(Keys key)
         {
-            if (this.Client.AllowedKeys.Contains(pKey))
+            if (this.Client.AllowedKeys.Contains(key))
             {
-                this.Client.SendMessage("key:" + pKey);
-                InputHiveClientForm.LoggingQueue.Enqueue(String.Format("{0} sent key {1}.", DateTime.Now, pKey));
+                this.Client.SendMessage("key:" + (int)key);
+                InputHiveClientForm.LoggingQueue.Enqueue(String.Format("{0} sent key {1}.", DateTime.Now, key));
             }
             else
-                InputHiveClientForm.LoggingQueue.Enqueue(String.Format("{0} failed to send key {1}. Key not allowed.",
-                    DateTime.Now, pKey));
+                InputHiveClientForm.LoggingQueue.Enqueue(String.Format("{0} failed to send key {1}. Key not allowed.", DateTime.Now, key));
         }
 
         public void SendChatMessage(string pMessage)

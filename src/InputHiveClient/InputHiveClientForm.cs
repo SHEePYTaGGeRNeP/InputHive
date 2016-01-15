@@ -170,7 +170,7 @@ namespace InputHiveClient
 
         private void tbxSendKey_KeyDown(object sender, KeyEventArgs e)
         {
-            string lvKeyString = char.ToUpper((char)e.KeyCode).ToString();
+            string lvKeyString = char.ToUpper((char)e.KeyCode).ToString();            
             this.SendKey(lvKeyString);
             this.tbxSendKey.Clear();
         }
@@ -188,8 +188,8 @@ namespace InputHiveClient
             this.cbxAllowedKeys.Invoke((MethodInvoker)(() =>
             {
                 this.cbxAllowedKeys.Items.Clear();
-                foreach (string lvKey in this._hiveClientSystem.Client.AllowedKeys)
-                    this.cbxAllowedKeys.Items.Add(lvKey);
+                foreach (Keys lvKey in this._hiveClientSystem.Client.AllowedKeys)
+                    this.cbxAllowedKeys.Items.Add(lvKey.ToString());
             }));
 
         }
@@ -226,9 +226,11 @@ namespace InputHiveClient
         {
             if (this._hiveClientSystem.Client.UsernameConfirmed == true)
             {
-                if (this.lbxSendingKeys.Items.Contains(pKey.ToString()))
+                if (this.lbxSendingKeys.Items.Contains(pKey))
                 {
-                    this._hiveClientSystem.SendKey(pKey);
+                    Keys key;
+                    if (Enum.TryParse(pKey, out key))
+                        this._hiveClientSystem.SendKey(key);
                 }
                 else
                     LoggingQueue.Enqueue(String.Format("{0} failed to send key {1} - You did not add this key to the list yet.",

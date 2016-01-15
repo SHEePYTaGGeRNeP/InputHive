@@ -6,6 +6,8 @@ using Hik.Communication.Scs.Communication.Messages;
 
 namespace InputHiveClient.Classes.Communication
 {
+    using System.Windows.Forms;
+
     class HiveCommunicationClient
     {
         public delegate void NewMessageHandler(ScsTextMessage pMessage);
@@ -24,11 +26,11 @@ namespace InputHiveClient.Classes.Communication
         /// <summary>
         /// List of all allowed Keys.ToString()
         /// </summary>
-        public List<string> AllowedKeys { get; private set; }
+        public List<Keys> AllowedKeys { get; private set; }
 
         public HiveCommunicationClient()
         {
-            this.AllowedKeys = new List<string>();
+            this.AllowedKeys = new List<Keys>();
         }
 
         public void Connect(string pIp, int pPort)       // succes = true,  error = false
@@ -49,7 +51,8 @@ namespace InputHiveClient.Classes.Communication
         {
             var lvMessage = e.Message as ScsTextMessage; //Server only accepts text messages
             if (lvMessage != null)
-                if (this.NewMessage != null) this.NewMessage.Invoke(lvMessage);
+                if (this.NewMessage != null)
+                    this.NewMessage.Invoke(lvMessage);
         }
 
         public void SendMessage(string pText)

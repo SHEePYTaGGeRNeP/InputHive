@@ -24,7 +24,7 @@ namespace InputHive.Classes.Communication
         /// <summary>
         /// List of all allowed Keys.ToString()
         /// </summary>
-        public List<string> AllowedKeys { get; set; }
+        public List<Keys> AllowedKeys { get; set; }
 
         private readonly System.Windows.Forms.Timer _countdownTimer;
 
@@ -34,7 +34,7 @@ namespace InputHive.Classes.Communication
             this.MinimumTime = pMinimumTime;
             this.AllowInput = pAllowInput;
             this.ShareScreens = pShareSceens;
-            this.AllowedKeys = new List<string>();
+            this.AllowedKeys = new List<Keys>();
             this._countdownTimer = new Timer();
             this._countdownTimer.Tick += this.CountdownTimerOnTick;
         }
@@ -49,7 +49,7 @@ namespace InputHive.Classes.Communication
             return this.Username + " " + this.ClientInformation.RemoteEndPoint;
         }
 
-        public void AddAllowedKey(string pKey)
+        public void AddAllowedKey(Keys pKey)
         {
             if (!this.AllowedKeys.Contains(pKey))
                 this.AllowedKeys.Add(pKey);
